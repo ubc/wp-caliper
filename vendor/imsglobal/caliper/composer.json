@@ -1,0 +1,38 @@
+{
+  "name": "imsglobal/caliper",
+  "description": "Caliper PHP Library",
+  "keywords": [
+    "caliper"
+  ],
+  "homepage": "https://www.imsglobal.org/caliper",
+  "type": "library",
+  "license": "LGPL-3.0",
+  "authors": [
+    {
+      "name": "Lance E Sloan",
+      "email": "lsloan-caliper-composer@umich.edu"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-comments": [
+    "Requirement 'php' will be updated to '>=5.6.6' ASAP, to support:",
+    [
+      "Math with constants",
+      "`JSON_PRESERVE_ZERO_FRACTION` constant",
+      "`::class` property to get class names"
+    ]
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "5.7.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "IMSGlobal\\Caliper\\": "src/"
+    },
+    "exclude-from-classmap": [
+      "/tests/"
+    ]
+  }
+}

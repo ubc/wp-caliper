@@ -1,0 +1,9 @@
+# Sublime Text
+*.sublime-*
+# Composer
+composer.phar
+composer.lock
+vendor
+# IntelliJ IDEA
+.idea
+*.iml

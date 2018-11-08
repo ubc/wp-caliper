@@ -1,0 +1,50 @@
+[
+    {
+        "name": "imsglobal/caliper",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/IMSGlobal/caliper-php-public.git",
+            "reference": "6a25c9d180aa51871f9a8387331ede84d695466d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/IMSGlobal/caliper-php-public/zipball/6a25c9d180aa51871f9a8387331ede84d695466d",
+            "reference": "6a25c9d180aa51871f9a8387331ede84d695466d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "5.7.*"
+        },
+        "time": "2018-01-16T15:32:04+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "IMSGlobal\\Caliper\\": "src/"
+            },
+            "exclude-from-classmap": [
+                "/tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Lance E Sloan",
+                "email": "lsloan-caliper-composer@umich.edu"
+            }
+        ],
+        "description": "Caliper PHP Library",
+        "homepage": "https://www.imsglobal.org/caliper",
+        "keywords": [
+            "caliper"
+        ]
+    }
+]
