@@ -1,0 +1,70 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "NavigationEvent",
+    "actor": {
+        "id": "http://www.ubc.ca/PUID123ROOT",
+        "type": "Person",
+        "name": "root",
+        "dateCreated": "2018-11-08T19:52:26.000Z"
+    },
+    "action": "NavigatedTo",
+    "object": {
+        "id": "http://localhost/course1?p=13",
+        "type": "WebPage",
+        "name": "sdfsfsf",
+        "description": "https://www.youtube.com/embed/M7lc1UVf-VE\r\n\r\n&nbsp;\r\n\r\nsdfsdfsdf",
+        "extensions": {
+            "post": true,
+            "permalink": "http://localhost/course1/2018/11/17/sdfsfsf/",
+            "postType": "post",
+            "postStatus": "publish",
+            "commentStatus": "open",
+            "pingStatus": "open",
+            "commentCount": "0",
+            "menuOrder": 0
+        },
+        "dateCreated": "2018-11-17T00:30:35.000Z",
+        "dateModified": "2018-11-17T00:30:35.000Z",
+        "creators": [
+            {
+                "id": "http://www.ubc.ca/PUID123ROOT",
+                "type": "Person",
+                "name": "root",
+                "dateCreated": "2018-11-08T19:52:26.000Z"
+            }
+        ],
+        "isPartOf": {
+            "id": "http://localhost/course1",
+            "type": "DigitalResource",
+            "name": "course 1",
+            "description": "Just another site !!!!!"
+        }
+    },
+    "eventTime": "2018-11-20T21:33:51.000Z",
+    "edApp": {
+        "id": "http://localhost/",
+        "type": "SoftwareApplication",
+        "name": "WordPress",
+        "version": "4.9.8"
+    },
+    "session": {
+        "id": "http://localhost/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+        "type": "Session",
+        "user": {
+            "id": "http://www.ubc.ca/PUID123ROOT",
+            "type": "Person",
+            "name": "root",
+            "dateCreated": "2018-11-08T19:52:26.000Z"
+        }
+    },
+    "id": "urn:uuid:f0fb4ee6-9be7-44fd-9529-723b79d5febd",
+    "extensions": {
+        "queryString": "",
+        "absolutePath": "http://localhost/course1/2018/11/17/sdfsfsf/",
+        "absoluteUrl": "http://localhost/course1/2018/11/17/sdfsfsf/",
+        "browser-info": {
+            "referer": "http://localhost/course1/wp-admin/post.php?post=13&action=edit",
+            "ipAddress": "172.18.0.1"
+        }
+    }
+}

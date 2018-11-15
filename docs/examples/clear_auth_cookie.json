@@ -1,0 +1,41 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "SessionEvent",
+    "actor": {
+        "id": "http://www.ubc.ca/PUID123ROOT",
+        "type": "Person",
+        "name": "root",
+        "dateCreated": "2018-11-08T19:52:26.000Z"
+    },
+    "action": "LoggedOut",
+    "object": {
+        "id": "http://localhost/",
+        "type": "SoftwareApplication",
+        "name": "WordPress",
+        "version": "4.9.8"
+    },
+    "eventTime": "2018-11-21T17:33:08.000Z",
+    "edApp": {
+        "id": "http://localhost/",
+        "type": "SoftwareApplication",
+        "name": "WordPress",
+        "version": "4.9.8"
+    },
+    "session": {
+        "id": "http://localhost/comp101/session/rhXBpAffzGNqBpbUQ7E52weE7mPIRe5ngj787thqZSI",
+        "type": "Session",
+        "user": {
+            "id": "http://www.ubc.ca/PUID123ROOT",
+            "type": "Person",
+            "name": "root",
+            "dateCreated": "2018-11-08T19:52:26.000Z"
+        }
+    },
+    "id": "urn:uuid:ec7b10ce-8354-4057-91c6-1bbe20634675",
+    "extensions": {
+        "browser-info": {
+            "referer": "http://localhost/comp101/wp-admin/admin.php?page=wp_caliper",
+            "ipAddress": "172.18.0.1"
+        }
+    }
+}

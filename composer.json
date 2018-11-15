@@ -1,11 +1,11 @@
 {
-	"name": "ubc/wp-caliper",
+    "name": "ubc/wp-caliper",
     "description": "The Caliper plugin emits caliper events to a LRS.",
     "keywords": [ "wordpress", "plugin", "caliper" ],
-	"type": "wordpress-plugin",
+    "type": "wordpress-plugin",
     "homepage": "https://github.com/ubc/wp-caliper",
-	"require": {
-		"imsglobal/caliper": "1.1.0"
+    "require": {
+        "imsglobal/caliper": "1.1.0"
     },
     "autoload": {
         "files": [

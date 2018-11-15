@@ -1,0 +1,69 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "Event",
+    "actor": {
+        "id": "http://www.ubc.ca/PUID123ROOT",
+        "type": "Person",
+        "name": "root",
+        "dateCreated": "2018-11-08T19:52:26.000Z"
+    },
+    "action": "Ranked",
+    "object": {
+        "id": "http://localhost/vote-site?p=14",
+        "type": "WebPage",
+        "name": "asd asd asd",
+        "description": "asd asd asd",
+        "extensions": {
+            "post": true,
+            "permalink": "http://localhost/vote-site/2018/11/20/asd-asd-asd/",
+            "postType": "post",
+            "postStatus": "publish",
+            "commentStatus": "open",
+            "pingStatus": "open",
+            "commentCount": "0",
+            "menuOrder": 0
+        },
+        "dateCreated": "2018-11-20T21:59:05.000Z",
+        "dateModified": "2018-11-20T21:59:05.000Z",
+        "creators": [
+            {
+                "id": "http://www.ubc.ca/PUID123ROOT",
+                "type": "Person",
+                "name": "root",
+                "dateCreated": "2018-11-08T19:52:26.000Z"
+            }
+        ],
+        "isPartOf": {
+            "id": "http://localhost/vote-site",
+            "type": "DigitalResource",
+            "name": "Voting Site",
+            "description": "Just another Some Website 1 Sites site"
+        }
+    },
+    "eventTime": "2018-11-20T21:59:17.000Z",
+    "edApp": {
+        "id": "http://localhost/",
+        "type": "SoftwareApplication",
+        "name": "WordPress",
+        "version": "4.9.8"
+    },
+    "session": {
+        "id": "http://localhost/vote-site/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+        "type": "Session",
+        "user": {
+            "id": "http://www.ubc.ca/PUID123ROOT",
+            "type": "Person",
+            "name": "root",
+            "dateCreated": "2018-11-08T19:52:26.000Z"
+        }
+    },
+    "id": "urn:uuid:e4a9f76c-dfd8-44de-b0cd-b1aa3330a090",
+    "extensions": {
+        "upVote": true,
+        "vote": 1,
+        "browser-info": {
+            "referer": "http://localhost/vote-site/",
+            "ipAddress": "172.18.0.1"
+        }
+    }
+}
