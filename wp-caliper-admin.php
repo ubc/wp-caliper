@@ -13,6 +13,7 @@ class WP_Caliper_Admin {
         'wp_caliper_disabled' => 'No',
         'wp_caliper_host' => '',
         'wp_caliper_api_key' => '',
+        'wp_caliper_disable_local_site_settings' => 'No',
         'wp_caliper_host_whitelist' => ''
     );
     private $local_fields = array(
@@ -33,10 +34,17 @@ class WP_Caliper_Admin {
         if ( self::$network_enabled ) {
             add_action( 'network_admin_menu', array( $this, 'wp_caliper_add_network_admin_menu' ) );
             add_action( 'admin_init', array( $this, 'wp_caliper_network_settings_init' ) );
-        }
 
-        add_action( 'admin_menu', array( $this, 'wp_caliper_add_local_admin_menu' ) );
-        add_action( 'admin_init', array( $this, 'wp_caliper_local_settings_init' ) );
+            self::setup_network_options();
+            // only show local site Caliper options if network allows
+            if ('Yes' != $this->options['wp_caliper_disable_local_site_settings']) {
+                add_action( 'admin_menu', array( $this, 'wp_caliper_add_local_admin_menu' ) );
+                add_action( 'admin_init', array( $this, 'wp_caliper_local_settings_init' ) );
+            }
+        } else {
+            add_action( 'admin_menu', array( $this, 'wp_caliper_add_local_admin_menu' ) );
+            add_action( 'admin_init', array( $this, 'wp_caliper_local_settings_init' ) );
+        }
 
         add_action( 'wp_ajax_wp_caliper_check_and_run_queue', array( $this, 'wp_caliper_check_and_run_queue' ) );
         add_action( 'admin_footer',  array( $this, 'wp_caliper_add_js' ) );
@@ -215,6 +223,13 @@ class WP_Caliper_Admin {
             'wp_caliper_network_settings_section'
         );
         add_settings_field(
+            'wp_caliper_network_disable_local_site_settings',
+            __( 'Disable Site Level Caliper Settings', 'wp_caliper' ),
+            array( $this, 'wp_caliper_disable_local_site_settings_render' ),
+            'wp_caliper_network',
+            'wp_caliper_network_settings_section'
+        );
+        add_settings_field(
             'wp_caliper_host_whitelist',
             __( 'Whitelisted LRS domains', 'wp_caliper' ),
             array( $this, 'wp_caliper_host_whitelist_render' ),
@@ -314,6 +329,19 @@ class WP_Caliper_Admin {
     public function wp_caliper_api_key_render() {
         ?>
         <input type='text' name='wp_caliper_settings[wp_caliper_api_key]' value='<?php echo esc_attr( $this->options['wp_caliper_api_key'] ); ?>'>
+        <?php
+    }
+
+
+    /**
+     * Outputs radio kill switch to stop all events being emitted to LRS
+     *
+     * @return void
+     */
+    public function wp_caliper_disable_local_site_settings_render() {
+        ?>
+        <input type='radio' name='wp_caliper_settings[wp_caliper_disable_local_site_settings]' value='No' <?php checked( $this->options['wp_caliper_disable_local_site_settings'], 'No' ) ?>>No
+        <input type='radio' name='wp_caliper_settings[wp_caliper_disable_local_site_settings]' value='Yes' <?php checked( $this->options['wp_caliper_disable_local_site_settings'], 'Yes' )?>>Yes
         <?php
     }
 

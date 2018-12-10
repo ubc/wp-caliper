@@ -2,8 +2,8 @@
 Contributors: Andrew Gardener
 Tags:  Caliper, BadgeOS, LRS
 Requires at least: WordPress 4.9
-Tested up to: 4.9.8
-Stable tag: 1.0.0
+Tested up to: 5.0.0
+Stable tag: 1.0.1
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -67,6 +67,9 @@ allowing you to later send them from the Caliper settings screen when the LRS is
 Nothing yet.
 
 == Changelog ==
+
+= 1.0.1 =
+* Add option to disable local site settings in network settings
 
 = 1.0.0 =
 * Initial public release

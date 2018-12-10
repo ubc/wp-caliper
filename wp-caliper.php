@@ -2,7 +2,7 @@
 /*
  * Plugin Name: WP Caliper
  * Plugin URI: https://github.com/ubc/wp-caliper
- * Version: 1.0.0
+ * Version: 1.0.1
  * Description: This plugin generates and emits Caliper events to the specified LRS
  * Tags: Caliper
  * Author: CTLT, Andrew Gardener
@@ -147,16 +147,27 @@ class WP_Caliper {
      * @return void
      */
     private static function setup_caliper_sensor($blog_id = NULL) {
-        self::$network_options = get_site_option( 'wp_caliper_network_settings' );
-        if ( function_exists( 'get_blog_option' ) ) {
-            self::$local_options = get_blog_option( $blog_id, 'wp_caliper_settings' );
+        // load network settings if network enabled
+        if ( self::$network_enabled ) {
+            self::$network_options = get_site_option( 'wp_caliper_network_settings' );
         } else {
-            self::$local_options = get_option( 'wp_caliper_settings' );
+            self::$network_options = NULL;
+        }
+
+        // load local settings if network allows
+        if ( empty(self::$network_options) || 'Yes' != self::$network_options['wp_caliper_disable_local_site_settings'] ) {
+            if ( function_exists( 'get_blog_option' ) ) {
+                self::$local_options = get_blog_option( $blog_id, 'wp_caliper_settings' );
+            } else {
+                self::$local_options = get_option( 'wp_caliper_settings' );
+            }
+        } else {
+            self::$local_options = NULL;
         }
 
         # if disabled at site or network level, do not emit any events
-        if ( 'Yes' === self::$local_options['wp_caliper_disabled'] ||
-             'Yes' === self::$network_options['wp_caliper_disabled'] ) {
+        if ( (! empty(self::$local_options) && 'Yes' === self::$local_options['wp_caliper_disabled']) ||
+             (! empty(self::$network_options) && 'Yes' === self::$network_options['wp_caliper_disabled'] ) ) {
             return;
         }
 
@@ -182,11 +193,11 @@ class WP_Caliper {
             add_action( 'admin_notices', array( 'WPCaliperPlugin\\WP_Caliper', 'wp_config_unset_network_notice' ) );
             error_log( '[wp-caliper] Please tell Network Administrator to set the default host and API key of the Caliper LRS (WP Caliper Plugin)' );
         }
-        if ( 'Yes' === self::$network_options['wp_caliper_disabled'] ) {
+        if ( ! empty(self::$network_options) && 'Yes' === self::$network_options['wp_caliper_disabled'] ) {
             add_action( 'admin_notices', array( 'WPCaliperPlugin\\WP_Caliper', 'wp_disabled_network_caliper_events_notice' ) );
             error_log( '[wp-caliper] The Network Administrator chose to disable Caliper events to be sent to the Network level LRS.' );
         }
-        if ( 'Yes' === self::$local_options['wp_caliper_disabled'] ) {
+        if ( ! empty(self::$local_options) && 'Yes' === self::$local_options['wp_caliper_disabled'] ) {
             add_action( 'admin_notices', array( 'WPCaliperPlugin\\WP_Caliper', 'wp_disabled_local_caliper_events_notice' ) );
             error_log( '[wp-caliper] The Administrator chose to disable Caliper events to be sent to the Site level LRS.' );
         }
@@ -202,7 +213,7 @@ class WP_Caliper {
             add_action( 'admin_notices', array( 'WPCaliperPlugin\\WP_Caliper', 'wp_config_unset_local_notice' ) );
             error_log( '[wp-caliper] Please tell the Site Administrator to set the host and API key of the Caliper LRS (WP Caliper Plugin)' );
         }
-        if ( 'Yes' === self::$local_options['wp_caliper_disabled'] ) {
+        if ( ! empty(self::$local_options) && 'Yes' === self::$local_options['wp_caliper_disabled'] ) {
             add_action( 'admin_notices', array( 'WPCaliperPlugin\\WP_Caliper', 'wp_disabled_local_caliper_events_notice' ) );
             error_log( '[wp-caliper] The Administrator chose to disable Caliper events to be sent to the Site level LRS.' );
         }
