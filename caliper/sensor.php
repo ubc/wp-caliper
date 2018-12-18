@@ -15,6 +15,18 @@ use IMSGlobal\Caliper\request\HttpRequestor;
 
 class CaliperSensor {
     private static $options = null;
+    private static $sendEvents = true; //allows disabling for unit tests
+    private static $tempStore = array();
+
+    public static function setSendEvents($sendEvents) {
+        self::$sendEvents = $sendEvents;
+    }
+
+    public static function getEnvelopes() {
+        $envelopes = self::$tempStore;
+        self::$tempStore = array();
+        return $envelopes;
+    }
 
     public static function setOptions($host, $apiKey) {
         self::$options = (new Options())
@@ -39,7 +51,7 @@ class CaliperSensor {
         return $options !== NULL && is_string($options->getHost()) && is_string($options->getApiKey());
     }
 
-    public static function sendEvent(Event &$event, \WP_User &$user) {
+    public static function sendEvent(Event &$event, \WP_User $user) {
         if (!self::caliperEnabled()) {
             return false;
         }
@@ -63,6 +75,11 @@ class CaliperSensor {
         }
         if (!self::caliperEnabled()) {
             return false;
+        }
+
+        self::$tempStore[] = $eventJson;
+        if (!self::$sendEvents) {
+            return true;
         }
 
         // Requires curl extension

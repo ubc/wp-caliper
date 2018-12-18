@@ -187,7 +187,7 @@ function wp_caliper_edit_comment( $comment_id ) {
  */
 add_action( 'transition_comment_status', 'WPCaliperPlugin\\wp_caliper_transition_comment_status', 10, 3 );
 function wp_caliper_transition_comment_status( $new_status, $old_status, $comment ) {
-    if (empty($comment->comment_ID)) { return; }
+    if (empty($comment) || empty($comment->comment_ID)) { return; }
 
     $event = (new Event())
         ->setObject(CaliperEntity::comment($comment));
@@ -333,7 +333,7 @@ function wp_caliper_save_post( $post_id, $post, $update ) {
  */
 add_action( 'transition_post_status', 'WPCaliperPlugin\\wp_caliper_transition_post_status', 10, 3 );
 function wp_caliper_transition_post_status( $new_status, $old_status, $post ) {
-    if (empty($post->ID)) { return; }
+    if (empty($post) || empty($post->ID)) { return; }
 
     $post_type = get_post_type($post);
     // don't log badge log entries

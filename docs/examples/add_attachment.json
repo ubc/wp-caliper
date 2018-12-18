@@ -1,30 +1,31 @@
 {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
-    "type": "NavigationEvent",
+    "type": "Event",
     "actor": {
         "id": "http://www.ubc.ca/PUID123ROOT",
         "type": "Person",
         "name": "root",
         "dateCreated": "2018-11-08T19:52:26.000Z"
     },
-    "action": "NavigatedTo",
+    "action": "Created",
     "object": {
-        "id": "http://localhost/course1?p=13",
-        "type": "WebPage",
-        "name": "sdfsfsf",
-        "description": "https://www.youtube.com/embed/M7lc1UVf-VE\r\n\r\n&nbsp;\r\n\r\nsdfsdfsdf",
+        "id": "http://localhost?p=32",
+        "type": "Document",
+        "name": "Yamada.chi.full.250818",
+        "description": "",
         "extensions": {
             "post": true,
-            "permalink": "http://localhost/course1/2018/11/17/sdfsfsf/",
-            "postType": "post",
-            "postStatus": "publish",
+            "permalink": "http://localhost/yamada-chi-full-250818/",
+            "postType": "attachment",
+            "postStatus": "inherit",
             "commentStatus": "open",
-            "pingStatus": "open",
+            "pingStatus": "closed",
             "commentCount": "0",
             "menuOrder": 0
         },
-        "dateCreated": "2018-11-17T00:30:35.000Z",
-        "dateModified": "2018-11-17T00:30:35.000Z",
+        "dateCreated": "2018-12-18T18:50:19.000Z",
+        "dateModified": "2018-12-18T18:50:19.000Z",
+        "mediaType": "image/jpeg",
         "creators": [
             {
                 "id": "http://www.ubc.ca/PUID123ROOT",
@@ -34,21 +35,21 @@
             }
         ],
         "isPartOf": {
-            "id": "http://localhost/course1",
+            "id": "http://localhost",
             "type": "DigitalResource",
-            "name": "course 1",
-            "description": "Just another site !!!!!"
+            "name": "Some Website 1",
+            "description": "Just another WordPress site"
         }
     },
-    "eventTime": "2018-11-20T21:33:51.000Z",
+    "eventTime": "2018-12-18T18:50:20.000Z",
     "edApp": {
         "id": "http://localhost/",
         "type": "SoftwareApplication",
         "name": "WordPress",
-        "version": "4.9.8"
+        "version": "5.0"
     },
     "session": {
-        "id": "http://localhost/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+        "id": "http://localhost/session/WEBH8mGALcB7YA5obLOc4Z6XY6xYJCokQ7VbGPtKC64",
         "type": "Session",
         "user": {
             "id": "http://www.ubc.ca/PUID123ROOT",
@@ -57,14 +58,11 @@
             "dateCreated": "2018-11-08T19:52:26.000Z"
         }
     },
-    "id": "urn:uuid:f0fb4ee6-9be7-44fd-9529-723b79d5febd",
+    "id": "urn:uuid:af16da66-894b-4083-a186-ad517aa4767b",
     "extensions": {
-        "queryString": "",
-        "absolutePath": "http://localhost/course1/2018/11/17/sdfsfsf/",
-        "absoluteUrl": "http://localhost/course1/2018/11/17/sdfsfsf/",
         "browser-info": {
-            "referer": "http://localhost/course1/wp-admin/post.php?post=13&action=edit",
-            "ipAddress": "172.18.0.1"
+            "referer": "http://localhost/wp-admin/media-new.php",
+            "ipAddress": "172.24.0.1"
         }
     }
 }

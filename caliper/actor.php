@@ -15,7 +15,7 @@ class CaliperActor {
         # load user data to get external unique identifier
         $user_data = get_userdata( $user->ID );
         $unique_id = get_user_meta( $user_data->ID, WP_CALIPER_DEFAULT_ACTOR_IDENTIFIER, true );
-        $unique_id = apply_filters( 'wp_caliper_actor_identifier', $unique_id );
+        $unique_id = apply_filters( 'wp_caliper_actor_identifier', $unique_id, $user->ID, $user_data );
 
         if ( empty( $unique_id ) ) {
             error_log( '[wp-caliper] Please ensure that the WP_CALIPER_DEFAULT_ACTOR_IDENTIFIER constant in wp-caliper-configs.php file is set properly!' );

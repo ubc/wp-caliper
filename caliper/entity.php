@@ -99,9 +99,9 @@ class CaliperEntity {
 
         // Add extra data based on post type
         if ('badges' == $post_type) {
-            $extensions['badgeClass'] = ResourceIRI::badgeClass($badge->ID);
+            $extensions['badgeClass'] = ResourceIRI::badgeClass($post->ID);
             $extensions['badgeIssuer'] = ResourceIRI::badgeIssuer();
-            $extensions['badgeImage'] = ResourceIRI::badgeImage($badge->ID);
+            $extensions['badgeImage'] = ResourceIRI::badgeImage($post->ID);
         } elseif ('attachment' == $post_type) {
             $mime_type = get_post_mime_type( $post->ID );
             if ($mime_type) {
