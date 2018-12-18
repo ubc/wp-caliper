@@ -1,18 +1,12 @@
 [
     {
         "name": "imsglobal/caliper",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "dev-develop",
+        "version_normalized": "dev-develop",
         "source": {
             "type": "git",
-            "url": "https://github.com/IMSGlobal/caliper-php-public.git",
-            "reference": "6a25c9d180aa51871f9a8387331ede84d695466d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/IMSGlobal/caliper-php-public/zipball/6a25c9d180aa51871f9a8387331ede84d695466d",
-            "reference": "6a25c9d180aa51871f9a8387331ede84d695466d",
-            "shasum": ""
+            "url": "https://github.com/IMSGlobal/caliper-php",
+            "reference": "b665dfda6f8bb3af2e461a16266b0bc649c9438a"
         },
         "require": {
             "php": ">=5.4.0"
@@ -20,9 +14,9 @@
         "require-dev": {
             "phpunit/phpunit": "5.7.*"
         },
-        "time": "2018-01-16T15:32:04+00:00",
+        "time": "2018-11-21T18:07:17+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "IMSGlobal\\Caliper\\": "src/"
@@ -31,7 +25,6 @@
                 "/tests/"
             ]
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "LGPL-3.0"
         ],

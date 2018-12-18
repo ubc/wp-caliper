@@ -1,8 +1,28 @@
-caliper-php
-===========
+# IMS Global Learning Consortium, Inc.
 
-caliper-php is a PHP library for [Caliper](http://www.imsglobal.org) that provides an implementation of the
-Caliper SensorAPI™.
+# caliper-php
+The [Caliper Analytics&reg; Specification](https://www.imsglobal.org/caliper/v1p1/caliper-spec-v1p1) 
+provides a structured approach to describing, collecting and exchanging learning activity data at 
+scale. Caliper also defines an application programming interface (the Sensor API&trade;) for marshalling and 
+transmitting event data from instrumented applications to target endpoints for storage, analysis and use.  
+
+*caliper-php* is a reference implementation of the Sensor API&trade; written in PHP.
+
+## Branches
+* __master__: stable, deployable branch that stores the official release history.  
+* __develop__: unstable development branch.  Current work that targets a future release is merged to 
+this branch.
+
+## Tags
+*caliper-php* releases are tagged and versioned MAJOR.MINOR.PATCH\[-label\] (e.g., 1.1.1). 
+Pre-release tags are identified with an extensions label (e.g., "1.2.0-RC01").  The tags are stored 
+in this repository.
+
+## Contributing
+We welcome the posting of issues by non IMS Global Learning Consortium members (e.g., feature 
+requests, bug reports, questions, etc.) but we *do not* accept contributions in the form of pull 
+requests from non-members. See [CONTRIBUTING.md](./CONTRIBUTING.md) for more 
+information.
 
 ## Getting Started
 
@@ -19,7 +39,6 @@ Caliper SensorAPI™.
 #### Using Composer
 
 ##### Update `composer.json` method 1: Let Composer do it
-
 In a command-line interface, use the following command to create `composer.json` (if your project doesn't
 have one already) or update it (if you do have one):
 
@@ -28,7 +47,6 @@ composer require imsglobal/caliper
 ```
 
 ##### Update `composer.json` method 2: Do it manually
-
 Add the following entry to the require element of the `composer.json` file for your web application:
 
 ```
@@ -38,7 +56,6 @@ Add the following entry to the require element of the `composer.json` file for y
 ```
 
 ##### Continuing the installation with Composer
-
 Once `composer.json` has been updated using one of the two methods described above, the packages need to be installed.
 (If you used the first method, Composer may have already done this step for you.  Doing this step again will not
 cause any problems.)
@@ -56,7 +73,6 @@ require_once 'vendor/autoload.php';
 ```
 
 #### Manual installation
-
 To install the library, clone the repository from GitHub into your desired application directory.
 
 ```
@@ -70,7 +86,6 @@ require_once '/path/to/caliper-php/autoload.php';
 ```
 
 ### Using the Library
-
 Now you're ready to initialize Caliper and send an event as follows:
 
 ```
@@ -97,19 +112,10 @@ try {
 
 You only need to create a single instance of a Sensor object which can be then used for sending all messages.
 
-## Documentation
-Documentation is available at [http://www.imsglobal.org/caliper](https://www.imsglobal.org/caliper).
+## License
+This project is licensed under the terms of the GNU Lesser General Public License (LGPL), version 3. 
+See the [LICENSE](./LICENSE) file for details. For additional information on licensing options for 
+IMS members, please see the [NOTICE](./NOTICE.md) file.
 
-## Credits
-
-A very special thank you to each of the developers that contributed to this project:
-
-* Prashant Nayak, Intellify Learning
-* balachandiran.v / Yoganand-htc
-* Lance E Sloan (lsloan at umich dot edu), University of Michigan
-* Stephen P Vickers, SPV Software Products
-
-Copyright © 2018 IMS Global Learning Consortium, Inc. All Rights Reserved.  
+©2018 IMS Global Learning Consortium, Inc. All Rights Reserved.
 Trademark Information - http://www.imsglobal.org/copyright.html
-
-For license information contact, info@imsglobal.org and read the LICENSE file contained in the repository.
