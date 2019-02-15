@@ -3,7 +3,7 @@ Contributors: Andrew Gardener
 Tags:  Caliper, BadgeOS, LRS
 Requires at least: WordPress 4.9
 Tested up to: 5.0.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -67,6 +67,10 @@ allowing you to later send them from the Caliper settings screen when the LRS is
 Nothing yet.
 
 == Changelog ==
+
+= 1.0.3 =
+* switched to php-caliper dev-develop#05f5eab0fc7fd14af44a410f0b65aff1d0e02d0a which adds Resource Management Profile support
+* modified Created, Modified, Deleted to emit resource management events (instead of basic)
 
 = 1.0.2 =
 * Added unit tests

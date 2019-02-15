@@ -1,13 +1,13 @@
 {
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
-    "type": "Event",
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension",
+    "type": "ResourceManagementEvent",
     "actor": {
         "id": "http://www.ubc.ca/PUID123ROOT",
         "type": "Person",
         "name": "root",
         "dateCreated": "2018-11-08T19:52:26.000Z"
     },
-    "action": "Activated",
+    "action": "Published",
     "object": {
         "id": "http://localhost/course1?p=1#comment=2",
         "type": "Message",

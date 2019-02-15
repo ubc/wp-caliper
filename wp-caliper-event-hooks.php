@@ -2,6 +2,7 @@
 namespace WPCaliperPlugin;
 
 use IMSGlobal\Caliper\events\Event;
+use IMSGlobal\Caliper\events\ResourceManagementEvent;
 use IMSGlobal\Caliper\events\NavigationEvent;
 use IMSGlobal\Caliper\events\SessionEvent;
 
@@ -156,7 +157,7 @@ function wp_caliper_comment_post( $comment_id ) {
         return;
     }
 
-    $event = (new Event())
+    $event = (new ResourceManagementEvent())
         ->setAction(new Action(Action::CREATED))
         ->setObject(CaliperEntity::comment($comment));
 
@@ -175,7 +176,7 @@ function wp_caliper_edit_comment( $comment_id ) {
         return;
     }
 
-    $event = (new Event())
+    $event = (new ResourceManagementEvent())
         ->setAction(new Action(Action::MODIFIED))
         ->setObject(CaliperEntity::comment($comment));
 
@@ -189,15 +190,15 @@ add_action( 'transition_comment_status', 'WPCaliperPlugin\\wp_caliper_transition
 function wp_caliper_transition_comment_status( $new_status, $old_status, $comment ) {
     if (empty($comment) || empty($comment->comment_ID)) { return; }
 
-    $event = (new Event())
+    $event = (new ResourceManagementEvent())
         ->setObject(CaliperEntity::comment($comment));
 
     if ( 'trash' == $new_status ) {
         $event->setAction(new Action(Action::DELETED));
     } elseif ( 'approved' == $old_status && 'approved' != $new_status ) {
-        $event->setAction(new Action(Action::DEACTIVATED));
+        $event->setAction(new Action(Action::UNPUBLISHED));
     } elseif ( 'approved' == $new_status && 'approved' != $old_status ) {
-        $event->setAction(new Action(Action::ACTIVATED));
+        $event->setAction(new Action(Action::PUBLISHED));
     } else {
         return;
     }
@@ -316,7 +317,7 @@ function wp_caliper_save_post( $post_id, $post, $update ) {
         return;
     }
 
-    $event = (new Event())
+    $event = (new ResourceManagementEvent())
         ->setObject(CaliperEntity::post($post));
 
     if ( $update ) {
@@ -341,7 +342,7 @@ function wp_caliper_transition_post_status( $new_status, $old_status, $post ) {
         return;
     }
 
-    $event = (new Event())
+    $event = (new ResourceManagementEvent())
         ->setObject(CaliperEntity::post($post));
 
     if ( 'trash' == $new_status ) {
@@ -350,9 +351,9 @@ function wp_caliper_transition_post_status( $new_status, $old_status, $post ) {
     // } elseif ( 'trash' == $old_status && 'trash' != $new_status ) {
     //     $event->setAction(new Action(Action::));
     } elseif ( 'publish' == $old_status && 'publish' != $new_status ) {
-        $event->setAction(new Action(Action::DEACTIVATED));
+        $event->setAction(new Action(Action::UNPUBLISHED));
     } elseif ( 'publish' == $new_status && 'publish' != $old_status ) {
-        $event->setAction(new Action(Action::ACTIVATED));
+        $event->setAction(new Action(Action::PUBLISHED));
     } else {
         return;
     }
@@ -369,7 +370,7 @@ function wp_caliper_add_attachment( $post_id ) {
 
     $post = get_post( $post_id );
 
-    $event = (new Event())
+    $event = (new ResourceManagementEvent())
         ->setAction(new Action(Action::CREATED))
         ->setObject(CaliperEntity::post($post));
 

@@ -117,7 +117,11 @@ class HookTest extends WP_UnitTestCase {
         $this->assertCount(1, $envelope['data']);
 
         $event = $envelope['data'][0];
-        $this->assertSame($event['@context'], "http://purl.imsglobal.org/ctx/caliper/v1p1");
+        if ($event['type'] == 'ResourceManagementEvent') {
+            $this->assertSame($event['@context'], "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension");
+        } else {
+            $this->assertSame($event['@context'], "http://purl.imsglobal.org/ctx/caliper/v1p1");
+        }
         unset($event['@context']);
 
         $this->assertNotNull($event['id']);
@@ -270,7 +274,7 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_comment_post() {
         $expected_event = array(
-            'type' => 'Event',
+            'type' => 'ResourceManagementEvent',
             'action' => 'Created',
             'object' => $this->expectedComment,
             'extensions' => array(
@@ -297,7 +301,7 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_edit_comment() {
         $expected_event = array(
-            'type' => 'Event',
+            'type' => 'ResourceManagementEvent',
             'action' => 'Modified',
             'object' => $this->expectedComment,
             'extensions' => array(
@@ -322,8 +326,8 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_transition_comment_status() {
         $expected_event = array(
-            'type' => 'Event',
-            'action' => 'Activated',
+            'type' => 'ResourceManagementEvent',
+            'action' => 'Published',
             'object' => $this->expectedComment,
             'extensions' => array(
                 'browser-info' => array(
@@ -342,7 +346,7 @@ class HookTest extends WP_UnitTestCase {
         $this->assertSame($expected_event, $actualEvent);
 
 
-        $expected_event['action'] = 'Deactivated';
+        $expected_event['action'] = 'Unpublished';
         WPCaliperPlugin\wp_caliper_transition_comment_status('some-other-status', 'approved', $this->comment);
         $envelopes = CaliperSensor::getEnvelopes();
 
@@ -504,7 +508,7 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_save_post() {
         $expected_event = array(
-            'type' => 'Event',
+            'type' => 'ResourceManagementEvent',
             'action' => 'Created',
             'object' => $this->expectedPost,
             'extensions' => array(
@@ -546,8 +550,8 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_transition_post_status() {
         $expected_event = array(
-            'type' => 'Event',
-            'action' => 'Activated',
+            'type' => 'ResourceManagementEvent',
+            'action' => 'Published',
             'object' => $this->expectedPost,
             'extensions' => array(
                 'browser-info' => array(
@@ -566,7 +570,7 @@ class HookTest extends WP_UnitTestCase {
         $this->assertSame($expected_event, $actualEvent);
 
 
-        $expected_event['action'] = 'Deactivated';
+        $expected_event['action'] = 'Unpublished';
         WPCaliperPlugin\wp_caliper_transition_post_status('some-other-status', 'publish', $this->post);
         $envelopes = CaliperSensor::getEnvelopes();
 
@@ -622,7 +626,7 @@ class HookTest extends WP_UnitTestCase {
         );
 
         $expected_event = array(
-            'type' => 'Event',
+            'type' => 'ResourceManagementEvent',
             'action' => 'Created',
             'object' => $this->expectedAttachmentPost,
             'extensions' => array(
