@@ -3,6 +3,7 @@ namespace IMSGlobal\Caliper\util;
 
 use IMSGlobal\Caliper\entities\Entity;
 use IMSGlobal\Caliper\events\Event;
+use IMSGlobal\Caliper\context;
 
 /**
  * Class ClassUtil
@@ -47,12 +48,29 @@ class ClassUtil {
      */
     protected function removeChildEntitySameContextsBase(array $serializationData, $parent) {
         $contextProperty = $parent->getContext()->getPropertyName();
+        $parentContext = $parent->getContext()->getValue();
+        $defaultContext = new context\Context(context\Context::CONTEXT);
+        $removableContexts = [$defaultContext];
+        if (is_string($parentContext)) {
+            $removableContexts []= $parentContext;
+        } elseif (is_array($parentContext)) {
+            array_merge($removableContexts, $parentContext);
+        }
 
         foreach ($serializationData as &$value) {
             if ($value instanceof \JsonSerializable) {
                 $value = $value->jsonSerialize();
                 if (is_array($value) && array_key_exists($contextProperty, $value)) {
-                    if ($value[$contextProperty] == $parent->getContext()) {
+                    if (is_array($value[$contextProperty]) && count($value[$contextProperty]) > 1) {
+                        // inner object has array of contexts - not trying to thin
+                        continue;
+                    } elseif (is_array($value[$contextProperty]) && count($value[$contextProperty]) == 1) {
+                        $comparableContext = array_pop($value[$contextProperty]);
+                    } else {
+                        $comparableContext = $value[$contextProperty];
+                    }
+
+                    if (in_array($comparableContext, $removableContexts)) {
                         $value[$contextProperty] = null;
                     }
                 }

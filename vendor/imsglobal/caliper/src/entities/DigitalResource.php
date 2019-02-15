@@ -25,7 +25,7 @@ use IMSGlobal\Caliper\util\TimestampUtil;
  *         as Scheme and Lisp
  *
  */
-class DigitalResource extends Entity implements Referrable, Targetable, CreativeWork {
+class DigitalResource extends Entity implements Referrable, Targetable, Generatable, CreativeWork {
     /**
      * @deprecated 1.2 Redundant.  See "@type".
      * @var string[]

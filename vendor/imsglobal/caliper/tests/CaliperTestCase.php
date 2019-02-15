@@ -8,7 +8,7 @@ require_once 'CaliperTestUtilities.php';
 class CaliperTestCase extends PHPUnit_Framework_TestCase {
     const
         DEFAULT_TIMEZONE = 'UTC',
-        FIXTURE_DIRECTORY_PATH = '/../caliper-common-fixtures/src/test/resources/fixtures/',
+        FIXTURE_DIRECTORY_PATH = '/../caliper-common-fixtures/src/',
         FIXTURE_FILE_EXTENSION = '.json';
 
     /** @var string */
