@@ -1,4 +1,8 @@
 {
+    "sensor": "https://testwiki.xx",
+    "sendTime": "2018-11-08T19:52:26.000Z",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "data": [{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
     "type": "Event",
     "actor": {
@@ -9,21 +13,21 @@
     },
     "action": "Completed",
     "object": {
-        "id": "http://localhost/badge-test?p=328",
+        "id": "http://wordpress/badge-test?p=328",
         "type": "Document",
         "name": "Nomination Badge",
         "description": "",
         "extensions": {
             "post": true,
-            "permalink": "http://localhost/badge-test/badges/nominate/",
+            "permalink": "http://wordpress/badge-test/badges/nominate/",
             "postType": "badges",
             "postStatus": "publish",
             "commentStatus": "closed",
             "pingStatus": "closed",
             "commentCount": "0",
             "menuOrder": 0,
-            "badgeClass": "http://localhost/badge-test/api/badge/badge_class/?uid=",
-            "badgeIssuer": "http://localhost/badge-test/api/badge/issuer/",
+            "badgeClass": "http://wordpress/badge-test/api/badge/badge_class/?uid=",
+            "badgeIssuer": "http://wordpress/badge-test/api/badge/issuer/",
             "badgeImage": false
         },
         "dateCreated": "2018-11-20T23:23:37.000Z",
@@ -37,7 +41,7 @@
             }
         ],
         "isPartOf": {
-            "id": "http://localhost/badge-test",
+            "id": "http://wordpress/badge-test",
             "type": "DigitalResource",
             "name": "Badge site",
             "description": "Just another Some Website 1 Sites site"
@@ -45,13 +49,13 @@
     },
     "eventTime": "2018-11-20T23:24:38.000Z",
     "edApp": {
-        "id": "http://localhost/",
+        "id": "http://wordpress/",
         "type": "SoftwareApplication",
         "name": "WordPress",
         "version": "4.9.8"
     },
     "session": {
-        "id": "http://localhost/badge-test/session/l9fFIjPr8Yi3VmnjM7XYkaYgpPyPjrfqat4PntWcp86",
+        "id": "http://wordpress/badge-test/session/l9fFIjPr8Yi3VmnjM7XYkaYgpPyPjrfqat4PntWcp86",
         "type": "Session",
         "user": {
             "id": "http://www.ubc.ca/PUID123ROOT",
@@ -63,10 +67,11 @@
     "id": "urn:uuid:53b9b130-bfdc-44be-ae28-297c02f3e438",
     "extensions": {
         "badgeEarned": true,
-        "badgeAssertion": "http://localhost/badge-test/api/badge/assertion/?uid=328--1",
+        "badgeAssertion": "http://wordpress/badge-test/api/badge/assertion/?uid=328--1",
         "browser-info": {
-            "referer": "http://localhost/badge-test/badges/nominate/",
+            "referer": "http://wordpress/badge-test/badges/nominate/",
             "ipAddress": "172.19.0.1"
         }
     }
+ }]
 }

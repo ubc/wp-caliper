@@ -1,4 +1,8 @@
 {
+    "sensor": "https://testwiki.xx",
+    "sendTime": "2018-11-08T19:52:26.000Z",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "data": [{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension",
     "type": "ResourceManagementEvent",
     "actor": {
@@ -9,13 +13,13 @@
     },
     "action": "Unpublished",
     "object": {
-        "id": "http://localhost/course1?p=15",
+        "id": "http://wordpress/course1?p=15",
         "type": "WebPage",
         "name": "New Post",
         "description": "New Post content",
         "extensions": {
             "post": true,
-            "permalink": "http://localhost/course1/?p=15",
+            "permalink": "http://wordpress/course1/?p=15",
             "postType": "post",
             "postStatus": "pending",
             "commentStatus": "open",
@@ -34,7 +38,7 @@
             }
         ],
         "isPartOf": {
-            "id": "http://localhost/course1",
+            "id": "http://wordpress/course1",
             "type": "DigitalResource",
             "name": "course 1",
             "description": "Just another site !!!!!"
@@ -42,13 +46,13 @@
     },
     "eventTime": "2018-11-20T21:50:16.000Z",
     "edApp": {
-        "id": "http://localhost/",
+        "id": "http://wordpress/",
         "type": "SoftwareApplication",
         "name": "WordPress",
         "version": "4.9.8"
     },
     "session": {
-        "id": "http://localhost/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+        "id": "http://wordpress/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
         "type": "Session",
         "user": {
             "id": "http://www.ubc.ca/PUID123ROOT",
@@ -60,8 +64,9 @@
     "id": "urn:uuid:8ca3b7ec-03b9-4419-ad1d-f3afba92438b",
     "extensions": {
         "browser-info": {
-            "referer": "http://localhost/course1/wp-admin/post.php?post=15&action=edit",
+            "referer": "http://wordpress/course1/wp-admin/post.php?post=15&action=edit",
             "ipAddress": "172.18.0.1"
         }
     }
+ }]
 }

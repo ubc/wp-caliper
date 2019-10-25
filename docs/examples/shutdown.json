@@ -1,4 +1,8 @@
 {
+    "sensor": "https://testwiki.xx",
+    "sendTime": "2018-11-08T19:52:26.000Z",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "data": [{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
     "type": "NavigationEvent",
     "actor": {
@@ -67,4 +71,5 @@
             "ipAddress": "172.18.0.1"
         }
     }
+ }]
 }

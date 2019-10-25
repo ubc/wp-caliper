@@ -1,4 +1,8 @@
 {
+    "sensor": "https://testwiki.xx",
+    "sendTime": "2018-11-08T19:52:26.000Z",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "data": [{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension",
     "type": "ResourceManagementEvent",
     "actor": {
@@ -9,13 +13,13 @@
     },
     "action": "Created",
     "object": {
-        "id": "http://localhost?p=32",
+        "id": "http://wordpress?p=32",
         "type": "Document",
         "name": "Yamada.chi.full.250818",
         "description": "",
         "extensions": {
             "post": true,
-            "permalink": "http://localhost/yamada-chi-full-250818/",
+            "permalink": "http://wordpress/yamada-chi-full-250818/",
             "postType": "attachment",
             "postStatus": "inherit",
             "commentStatus": "open",
@@ -35,7 +39,7 @@
             }
         ],
         "isPartOf": {
-            "id": "http://localhost",
+            "id": "http://wordpress",
             "type": "DigitalResource",
             "name": "Some Website 1",
             "description": "Just another WordPress site"
@@ -43,13 +47,13 @@
     },
     "eventTime": "2018-12-18T18:50:20.000Z",
     "edApp": {
-        "id": "http://localhost/",
+        "id": "http://wordpress/",
         "type": "SoftwareApplication",
         "name": "WordPress",
         "version": "5.0"
     },
     "session": {
-        "id": "http://localhost/session/WEBH8mGALcB7YA5obLOc4Z6XY6xYJCokQ7VbGPtKC64",
+        "id": "http://wordpress/session/WEBH8mGALcB7YA5obLOc4Z6XY6xYJCokQ7VbGPtKC64",
         "type": "Session",
         "user": {
             "id": "http://www.ubc.ca/PUID123ROOT",
@@ -61,8 +65,9 @@
     "id": "urn:uuid:af16da66-894b-4083-a186-ad517aa4767b",
     "extensions": {
         "browser-info": {
-            "referer": "http://localhost/wp-admin/media-new.php",
+            "referer": "http://wordpress/wp-admin/media-new.php",
             "ipAddress": "172.24.0.1"
         }
     }
+ }]
 }

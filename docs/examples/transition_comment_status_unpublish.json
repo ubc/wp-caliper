@@ -1,4 +1,8 @@
 {
+    "sensor": "https://testwiki.xx",
+    "sendTime": "2018-11-08T19:52:26.000Z",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "data": [{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension",
     "type": "ResourceManagementEvent",
     "actor": {
@@ -9,7 +13,7 @@
     },
     "action": "Unpublished",
     "object": {
-        "id": "http://localhost/course1?p=1#comment=2",
+        "id": "http://wordpress/course1?p=1#comment=2",
         "type": "Message",
         "extensions": {
             "karma": "0",
@@ -21,13 +25,13 @@
         },
         "dateCreated": "2018-11-20T22:05:14.000Z",
         "isPartOf": {
-            "id": "http://localhost/course1?p=1",
+            "id": "http://wordpress/course1?p=1",
             "type": "WebPage",
             "name": "Hello world!",
-            "description": "Welcome to <a href=\"http://localhost/\">Some Website 1 Sites</a>. This is your first post. Edit or delete it, then start blogging!",
+            "description": "Welcome to <a href=\"http://wordpress/\">Some Website 1 Sites</a>. This is your first post. Edit or delete it, then start blogging!",
             "extensions": {
                 "post": true,
-                "permalink": "http://localhost/course1/2018/11/08/hello-world/",
+                "permalink": "http://wordpress/course1/2018/11/08/hello-world/",
                 "postType": "post",
                 "postStatus": "publish",
                 "commentStatus": "open",
@@ -46,7 +50,7 @@
                 }
             ],
             "isPartOf": {
-                "id": "http://localhost/course1",
+                "id": "http://wordpress/course1",
                 "type": "DigitalResource",
                 "name": "course 1",
                 "description": "Just another site !!!!!"
@@ -54,19 +58,19 @@
         },
         "body": "This is a reply",
         "replyTo": {
-            "id": "http://localhost/course1?p=1#comment=1",
+            "id": "http://wordpress/course1?p=1#comment=1",
             "type": "Message"
         }
     },
     "eventTime": "2018-11-20T22:05:46.000Z",
     "edApp": {
-        "id": "http://localhost/",
+        "id": "http://wordpress/",
         "type": "SoftwareApplication",
         "name": "WordPress",
         "version": "4.9.8"
     },
     "session": {
-        "id": "http://localhost/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+        "id": "http://wordpress/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
         "type": "Session",
         "user": {
             "id": "http://www.ubc.ca/PUID123ROOT",
@@ -78,8 +82,9 @@
     "id": "urn:uuid:26e71741-9b9a-442d-81dd-678f2f8ff0b6",
     "extensions": {
         "browser-info": {
-            "referer": "http://localhost/course1/wp-admin/comment.php?action=editcomment&c=2",
+            "referer": "http://wordpress/course1/wp-admin/comment.php?action=editcomment&c=2",
             "ipAddress": "172.18.0.1"
         }
     }
+ }]
 }

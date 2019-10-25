@@ -1,4 +1,8 @@
 {
+    "sensor": "https://testwiki.xx",
+    "sendTime": "2018-11-08T19:52:26.000Z",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "data": [{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
     "type": "Event",
     "actor": {
@@ -9,13 +13,13 @@
     },
     "action": "Ranked",
     "object": {
-        "id": "http://localhost/vote-site?p=14",
+        "id": "http://wordpress/vote-site?p=14",
         "type": "WebPage",
         "name": "asd asd asd",
         "description": "asd asd asd",
         "extensions": {
             "post": true,
-            "permalink": "http://localhost/vote-site/2018/11/20/asd-asd-asd/",
+            "permalink": "http://wordpress/vote-site/2018/11/20/asd-asd-asd/",
             "postType": "post",
             "postStatus": "publish",
             "commentStatus": "open",
@@ -34,7 +38,7 @@
             }
         ],
         "isPartOf": {
-            "id": "http://localhost/vote-site",
+            "id": "http://wordpress/vote-site",
             "type": "DigitalResource",
             "name": "Voting Site",
             "description": "Just another Some Website 1 Sites site"
@@ -42,13 +46,13 @@
     },
     "eventTime": "2018-11-20T22:01:13.000Z",
     "edApp": {
-        "id": "http://localhost/",
+        "id": "http://wordpress/",
         "type": "SoftwareApplication",
         "name": "WordPress",
         "version": "4.9.8"
     },
     "session": {
-        "id": "http://localhost/vote-site/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+        "id": "http://wordpress/vote-site/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
         "type": "Session",
         "user": {
             "id": "http://www.ubc.ca/PUID123ROOT",
@@ -61,8 +65,9 @@
     "extensions": {
         "favorited": true,
         "browser-info": {
-            "referer": "http://localhost/vote-site/",
+            "referer": "http://wordpress/vote-site/",
             "ipAddress": "172.18.0.1"
         }
     }
+ }]
 }

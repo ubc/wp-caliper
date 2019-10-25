@@ -1,4 +1,8 @@
 {
+    "sensor": "https://testwiki.xx",
+    "sendTime": "2018-11-08T19:52:26.000Z",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "data": [{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension",
     "type": "ResourceManagementEvent",
     "actor": {
@@ -9,20 +13,20 @@
     },
     "action": "Created",
     "object": {
-        "id": "http://localhost/course1?p=16",
+        "id": "http://wordpress/course1?p=16",
         "type": "Document",
         "name": "New Post",
         "description": "New Post content",
         "extensions": {
             "post": true,
-            "permalink": "http://localhost/course1/2018/11/20/15-revision-v1/",
+            "permalink": "http://wordpress/course1/2018/11/20/15-revision-v1/",
             "postType": "revision",
             "postStatus": "inherit",
             "commentStatus": "closed",
             "pingStatus": "closed",
             "commentCount": "0",
             "menuOrder": 0,
-            "postParent": "http://localhost/course1?p=15"
+            "postParent": "http://wordpress/course1?p=15"
         },
         "dateCreated": "2018-11-20T21:36:55.000Z",
         "dateModified": "2018-11-20T21:36:55.000Z",
@@ -35,7 +39,7 @@
             }
         ],
         "isPartOf": {
-            "id": "http://localhost/course1",
+            "id": "http://wordpress/course1",
             "type": "DigitalResource",
             "name": "course 1",
             "description": "Just another site !!!!!"
@@ -43,13 +47,13 @@
     },
     "eventTime": "2018-11-20T21:36:56.000Z",
     "edApp": {
-        "id": "http://localhost/",
+        "id": "http://wordpress/",
         "type": "SoftwareApplication",
         "name": "WordPress",
         "version": "4.9.8"
     },
     "session": {
-        "id": "http://localhost/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+        "id": "http://wordpress/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
         "type": "Session",
         "user": {
             "id": "http://www.ubc.ca/PUID123ROOT",
@@ -61,8 +65,9 @@
     "id": "urn:uuid:10b040ec-f9ad-40ac-bdeb-660947c383d2",
     "extensions": {
         "browser-info": {
-            "referer": "http://localhost/course1/wp-admin/post-new.php",
+            "referer": "http://wordpress/course1/wp-admin/post-new.php",
             "ipAddress": "172.18.0.1"
         }
     }
+ }]
 }
