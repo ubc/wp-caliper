@@ -35,7 +35,6 @@ class WP_Caliper {
 	private static $local_options;
 	public static $dependencies = array(
 		'BadgeOS'                          => 'http://wordpress.org/plugins/badgeos/',
-		'JSON_API'                         => 'http://wordpress.org/plugins/json-api/',
 		'BadgeOS_Open_Badges_Issuer_AddOn' => 'https://github.com/ubc/open-badges-issuer-addon',
 	);
 
