@@ -29,12 +29,12 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 
 function generate_unique( $string, $user_id, $user_data ) {
-    return $user_id;
+	return $user_id;
 }
 tests_add_filter( 'wp_caliper_actor_identifier', 'generate_unique', 10, 3 );
 
 function actor_homepage( $string ) {
-    return 'http://test.homepage.com';
+	return 'http://test.homepage.com';
 }
 tests_add_filter( 'wp_caliper_actor_homepage', 'actor_homepage', 10, 1 );
 

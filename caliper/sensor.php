@@ -14,100 +14,106 @@ use IMSGlobal\Caliper\util\TimestampUtil;
 use IMSGlobal\Caliper\request\HttpRequestor;
 
 class CaliperSensor {
-    private static $options = null;
-    private static $sendEvents = true; //allows disabling for unit tests
-    private static $tempStore = array();
+	private static $options     = null;
+	private static $send_events = true; // allows disabling for unit tests.
+	private static $temp_store  = array();
 
-    public static function setSendEvents($sendEvents) {
-        self::$sendEvents = $sendEvents;
-    }
+	public static function setSendEvents( $send_events ) {
+		self::$send_events = $send_events;
+	}
 
-    public static function getEnvelopes() {
-        $envelopes = self::$tempStore;
-        self::$tempStore = array();
-        return $envelopes;
-    }
+	public static function getEnvelopes() {
+		$envelopes        = self::$temp_store;
+		self::$temp_store = array();
+		return $envelopes;
+	}
 
-    public static function setOptions($host, $apiKey) {
-        self::$options = (new Options())
-            ->setApiKey("Bearer $apiKey")
-            ->setHost($host);
-    }
+	public static function setOptions( $host, $api_key ) {
+		self::$options = ( new Options() )
+			->setApiKey( "Bearer $api_key" )
+			->setHost( $host );
+	}
 
-    private static function getOptions() {
-        return self::$options;
-    }
+	private static function getOptions() {
+		return self::$options;
+	}
 
-    private static function getSensor() {
-        $sensor = new Sensor(ResourceIRI::wordPress());
-        $sensor->registerClient(
-            'default_client', new Client('remote_lrs', self::getOptions())
-        );
-        return $sensor;
-    }
+	private static function getSensor() {
+		$sensor = new Sensor( ResourceIRI::wordPress() );
+		$sensor->registerClient(
+			'default_client', new Client( 'remote_lrs', self::getOptions() )
+		);
+		return $sensor;
+	}
 
-    public static function caliperEnabled() {
-        $options = self::getOptions();
-        return $options !== NULL && is_string($options->getHost()) && is_string($options->getApiKey());
-    }
+	public static function caliperEnabled() {
+		$options = self::getOptions();
+		return $options !== null && is_string( $options->getHost() ) && is_string( $options->getApiKey() );
+	}
 
-    public static function sendEvent(Event &$event, \WP_User $user) {
-        if (!self::caliperEnabled()) {
-            return false;
-        }
-        CaliperEvent::addDefaults($event, $user);
+	public static function sendEvent( Event &$event, \WP_User $user ) {
+		if ( ! self::caliperEnabled() ) {
+			return false;
+		}
+		CaliperEvent::addDefaults( $event, $user );
 
-        $requestor = new HttpRequestor(self::getOptions());
-        $envelope = $requestor->createEnvelope(self::getSensor(), $event);
-        $eventJson = $requestor->serializeData($envelope);
+		$requestor  = new HttpRequestor( self::getOptions() );
+		$envelope   = $requestor->createEnvelope( self::getSensor(), $event );
+		$event_json = $requestor->serializeData( $envelope );
 
-        $success = self::_sendEvent($eventJson);
-        if ( ! $success ) {
-            $blog_id = function_exists( 'get_current_blog_id' ) ? get_current_blog_id() : NULL;
-            WP_Caliper::wp_caliper_add_queue( $eventJson, $blog_id );
-        }
-        return $success;
-    }
+		$success = self::_sendEvent( $event_json );
+		if ( ! $success ) {
+			$blog_id = function_exists( 'get_current_blog_id' ) ? get_current_blog_id() : null;
+			WP_Caliper::wp_caliper_add_queue( $event_json, $blog_id );
+		}
+		return $success;
+	}
 
-    public static function _sendEvent($eventJson) {
-        if (!is_string($eventJson)) {
-            throw new \InvalidArgumentException(__METHOD__ . ': string expected');
-        }
-        if (!self::caliperEnabled()) {
-            return false;
-        }
+	public static function _sendEvent( $event_json ) {
+		if ( ! is_string( $event_json ) ) {
+			throw new \InvalidArgumentException( __METHOD__ . ': string expected' );
+		}
+		if ( ! self::caliperEnabled() ) {
+			return false;
+		}
 
-        self::$tempStore[] = $eventJson;
-        if (!self::$sendEvents) {
-            return true;
-        }
+		// used for unit tests.
+		if ( ! self::$send_events ) {
+			self::$temp_store[] = $event_json;
+			return true;
+		}
 
-        // Requires curl extension
-        // based off of https://github.com/IMSGlobal/caliper-php/blob/master/src/request/HttpRequestor.php#L75
-        $client = curl_init(self::getOptions()->getHost());
-        $headers = [
-            'Content-Type: application/json',
-            'Authorization: ' .self::getOptions()->getApiKey()
-        ];
-        curl_setopt_array($client, [
-            CURLOPT_POST => true,
-            CURLOPT_TIMEOUT_MS => self::getOptions()->getConnectionTimeout(),
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_USERAGENT => 'Caliper (PHP curl extension)',
-            CURLOPT_HEADER => true, // CURLOPT_HEADER required to return response text
-            CURLOPT_RETURNTRANSFER => true, // CURLOPT_RETURNTRANSFER required to return response text
-            CURLOPT_POSTFIELDS => $eventJson,
-        ]);
+		/*
+		 * Requires curl extension
+		 * based off of https://github.com/IMSGlobal/caliper-php/blob/master/src/request/HttpRequestor.php#L75
+		 */
+		$client  = curl_init( self::getOptions()->getHost() );
+		$headers = [
+			'Content-Type: application/json',
+			'Authorization: ' .self::getOptions()->getApiKey(),
+		];
+		curl_setopt_array(
+			$client,
+			array(
+				CURLOPT_POST           => true,
+				CURLOPT_TIMEOUT_MS     => self::getOptions()->getConnectionTimeout(),
+				CURLOPT_HTTPHEADER     => $headers,
+				CURLOPT_USERAGENT      => 'Caliper ( PHP curl extension )',
+				CURLOPT_HEADER         => true, // CURLOPT_HEADER required to return response text.
+				CURLOPT_RETURNTRANSFER => true, // CURLOPT_RETURNTRANSFER required to return response text.
+				CURLOPT_POSTFIELDS     => $event_json,
+			)
+		);
 
-        $responseText = curl_exec($client);
-        $responseInfo = curl_getinfo($client);
-        curl_close($client);
+		$response_text = curl_exec( $client );
+		$response_info = curl_getinfo( $client );
+		curl_close( $client );
 
-        $responseCode = $responseText ? $responseInfo['http_code'] : null;
-        if ($responseCode != 200) {
-            error_log( '[wp-caliper] Failed to emit Caliper event: '. print_r( $eventJson, true ) );
-            return false;
-        }
-        return true;
-    }
+		$response_code = $response_text ? $response_info['http_code'] : null;
+		if ( 200 !== $response_code ) {
+			error_log( '[wp-caliper] Failed to emit Caliper event: '. print_r( $event_json, true ) );
+			return false;
+		}
+		return true;
+	}
 }
