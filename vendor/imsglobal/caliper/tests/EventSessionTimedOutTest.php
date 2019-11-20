@@ -1,6 +1,7 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Person;
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
@@ -21,6 +22,8 @@ class EventSessionTimedOutTest extends CaliperTestCase {
                 ->setActor(
                     (new SoftwareApplication('https://example.edu'))
                 )
+                ->setProfile(
+                    new Profile(Profile::SESSION))
                 ->setAction(
                     new Action(Action::TIMED_OUT))
                 ->setObject(

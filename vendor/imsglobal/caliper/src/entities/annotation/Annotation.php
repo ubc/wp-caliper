@@ -13,7 +13,7 @@ use IMSGlobal\Caliper\entities\foaf\Agent;
  *         which are specified in the Caliper Annotation Metric Profile
  *
  */
-abstract class Annotation extends entities\Entity implements entities\Generatable {
+class Annotation extends entities\Entity implements entities\Generatable {
     /** @var Agent|null */
     private $annotator;
     /** @var DigitalResource|null */

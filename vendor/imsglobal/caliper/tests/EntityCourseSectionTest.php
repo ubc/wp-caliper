@@ -1,6 +1,8 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\entities\SystemIdentifier;
+use IMSGlobal\Caliper\entities\SystemIdentifierType;
 use IMSGlobal\Caliper\entities\lis\CourseOffering;
 use IMSGlobal\Caliper\entities\lis\CourseSection;
 
@@ -24,6 +26,9 @@ class EntityCourseSectionTest extends CaliperTestCase {
                 ->setName(
                     'CPS 435 Learning Analytics, Section 01'
                 )
+                ->setOtherIdentifiers([
+                    (new SystemIdentifier('example.edu:SI182-001-F16', new SystemIdentifierType(SystemIdentifierType::LIS_SOURCED_ID))),
+                ])
                 ->setCategory(
                     'seminar'
                 )

@@ -21,7 +21,7 @@ class EntityQueryTest extends CaliperTestCase {
                 ->setSearchTarget(
                     (new SoftwareApplication('https://example.edu/catalog'))
                 )
-                ->setSearchTerms("IMS AND (Caliper OR Analytics)")
+                ->setSearchTerms('IMS AND (Caliper OR Analytics)')
                 ->setDateCreated(
                     new \DateTime('2018-11-15T10:05:00.000Z'))
         );

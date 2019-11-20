@@ -1,6 +1,8 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\entities\SystemIdentifier;
+use IMSGlobal\Caliper\entities\SystemIdentifierType;
 use IMSGlobal\Caliper\entities\lis\CourseOffering;
 
 
@@ -23,6 +25,9 @@ class EntityCourseOfferingTest extends CaliperTestCase {
                 ->setName(
                     'CPS 435 Learning Analytics'
                 )
+                ->setOtherIdentifiers([
+                    (new SystemIdentifier('example.edu:SI182-F16', new SystemIdentifierType(SystemIdentifierType::LIS_SOURCED_ID))),
+                ])
                 ->setDateCreated(
                     new \DateTime('2016-08-01T06:00:00.000Z'))
                 ->setDateModified(

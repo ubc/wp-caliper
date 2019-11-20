@@ -19,6 +19,7 @@ class EnvelopeEntitySingleTest extends CaliperTestCase {
             ->setData([
                 (new DigitalResource('https://example.edu/terms/201601/courses/7/sections/1/resources/1/syllabus.pdf'))
                     ->setName('Course Syllabus')
+                    ->setStorageName('fall-2016-syllabus.pdf')
                     ->setMediaType('application/pdf')
                     ->setCreators([
                         (new Person('https://example.edu/users/223344')),

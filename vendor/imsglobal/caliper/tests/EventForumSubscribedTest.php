@@ -1,6 +1,7 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Organization;
 use IMSGlobal\Caliper\entities\agent\Person;
@@ -27,6 +28,8 @@ class EventForumSubscribedTest extends CaliperTestCase {
                 ->setActor(
                     (new Person('https://example.edu/users/554433'))
                 )
+                ->setProfile(
+                    new Profile(Profile::FORUM))
                 ->setAction(
                     new Action(Action::SUBSCRIBED))
                 ->setObject(

@@ -2,7 +2,7 @@
 
 namespace IMSGlobal\Caliper\entities;
 
-class DigitalResourceCollection extends DigitalResource {
+class DigitalResourceCollection extends DigitalResource implements Collectable {
     /** @var DigitalResource[]|null */
     private $items;
 

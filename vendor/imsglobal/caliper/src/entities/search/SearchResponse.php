@@ -6,7 +6,6 @@ use IMSGlobal\Caliper\entities\Entity;
 use IMSGlobal\Caliper\entities\search\Query;
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
 use IMSGlobal\Caliper\entities;
-use IMSGlobal\Caliper\context\Context;
 
 class SearchResponse extends Entity implements entities\Referrable, entities\Generatable {
     /** @var SoftwareApplication|null */
@@ -23,7 +22,6 @@ class SearchResponse extends Entity implements entities\Referrable, entities\Gen
     public function __construct($id) {
         parent::__construct($id);
         $this->setType(new entities\EntityType(entities\EntityType::SEARCH_RESPONSE));
-        $this->setContext(new Context(Context::SEARCH_PROFILE_EXTENSION));
     }
 
     public function jsonSerialize() {

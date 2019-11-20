@@ -1,12 +1,12 @@
 [
     {
         "name": "imsglobal/caliper",
-        "version": "dev-develop",
-        "version_normalized": "dev-develop",
+        "version": "dev-develop-v1p2",
+        "version_normalized": "dev-develop-v1p2",
         "source": {
             "type": "git",
-            "url": "https://github.com/IMSGlobal/caliper-php",
-            "reference": "05f5eab0fc7fd14af44a410f0b65aff1d0e02d0a"
+            "url": "https://github.com/andrew-gardener/caliper-php",
+            "reference": "fa595784e7ed1015cad2341ac6e5e1819e2cd443"
         },
         "require": {
             "php": ">=5.4.0"
@@ -14,7 +14,7 @@
         "require-dev": {
             "phpunit/phpunit": "5.7.*"
         },
-        "time": "2019-02-12T20:33:46+00:00",
+        "time": "2019-10-31T22:00:14+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {

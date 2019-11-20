@@ -1,6 +1,7 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Person;
 use IMSGlobal\Caliper\entities\reading\Document;
@@ -10,7 +11,7 @@ use IMSGlobal\Caliper\events\Event;
 /**
  * @requires PHP 5.6.28
  */
-class EventBasicCreatedTest extends CaliperTestCase {
+class EventGeneralCreatedTest extends CaliperTestCase {
     function setUp() {
         parent::setUp();
 
@@ -20,6 +21,8 @@ class EventBasicCreatedTest extends CaliperTestCase {
                 ->setActor(
                     (new Person('https://example.edu/users/554433'))
                 )
+                ->setProfile(
+                    new Profile(Profile::GENERAL))
                 ->setAction(
                     new Action(Action::CREATED))
                 ->setObject(

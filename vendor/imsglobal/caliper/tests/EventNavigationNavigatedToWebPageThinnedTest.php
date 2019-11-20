@@ -1,6 +1,7 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Organization;
 use IMSGlobal\Caliper\entities\agent\Person;
@@ -14,7 +15,7 @@ use IMSGlobal\Caliper\events\NavigationEvent;
 /**
  * @requires PHP 5.6.28
  */
-class EventNavigationNavigatedToThinnedTest extends CaliperTestCase {
+class EventNavigationNavigatedToWebPageThinnedTest extends CaliperTestCase {
     function setUp() {
         parent::setUp();
 
@@ -23,6 +24,8 @@ class EventNavigationNavigatedToThinnedTest extends CaliperTestCase {
             (new NavigationEvent('urn:uuid:71657137-8e6e-44f8-8499-e1c3df6810d2'))
                 ->setActor(
                     (new Person('https://example.edu/users/554433'))->makeReference())
+                ->setProfile(
+                    new Profile(Profile::READING))
                 ->setAction(
                     new Action(Action::NAVIGATED_TO))
                 ->setObject(

@@ -4,9 +4,12 @@ namespace IMSGlobal\Caliper\entities\session;
 
 use IMSGlobal\Caliper\entities;
 use IMSGlobal\Caliper\entities\foaf\Agent;
+use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
 use IMSGlobal\Caliper\util;
 
 class Session extends entities\Entity implements entities\Generatable, entities\Targetable {
+    /** @var SoftwareApplication|null */
+    private $client;
     /** @var Agent|null */
     private $user;
     /** @var \DateTime */
@@ -25,11 +28,31 @@ class Session extends entities\Entity implements entities\Generatable, entities\
         $serializedParent = parent::jsonSerialize();
         if (!is_array($serializedParent)) return $serializedParent;
         return $this->removeChildEntitySameContexts(array_merge($serializedParent, [
+            'client' => $this->getClient(),
             'user' => $this->getUser(),
             'startedAtTime' => util\TimestampUtil::formatTimeISO8601MillisUTC($this->getStartedAtTime()),
             'endedAtTime' => util\TimestampUtil::formatTimeISO8601MillisUTC($this->getEndedAtTime()),
             'duration' => $this->getDuration(),
         ]));
+    }
+
+    /** @return SoftwareApplication|null client */
+    public function getClient() {
+        return $this->client;
+    }
+
+    /**
+     * @param SoftwareApplication|null $client
+     * @throws \InvalidArgumentException SoftwareApplication required
+     * @return $this|Session
+     */
+    public function setClient($client) {
+        if (is_null($client) || ($client instanceof SoftwareApplication)) {
+            $this->client = $client;
+            return $this;
+        }
+
+        throw new \InvalidArgumentException(__METHOD__ . ': SoftwareApplication expected');
     }
 
     /** @return Agent|null user */

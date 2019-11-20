@@ -17,6 +17,9 @@ class EntityAssignableDigitalResourceTest extends CaliperTestCase {
                 ->setName(
                     'Week 9 Reflection'
                 )
+                ->setStorageName(
+                    'assignment-2.pdf'
+                )
                 ->setDescription(
                     '3-5 page reflection on this week\'s assigned readings.'
                 )

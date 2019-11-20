@@ -1,6 +1,7 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Organization;
 use IMSGlobal\Caliper\entities\agent\Person;
@@ -27,6 +28,8 @@ class EventSearchSearchedTest extends CaliperTestCase {
                 ->setActor(
                     (new Person('https://example.edu/users/554433'))
                 )
+                ->setProfile(
+                    new Profile(Profile::SEARCH))
                 ->setAction(
                     new Action(Action::SEARCHED))
                 ->setObject(
@@ -48,16 +51,11 @@ class EventSearchSearchedTest extends CaliperTestCase {
                                 ->setSearchTarget(
                                     ((new SoftwareApplication('https://example.edu/catalog'))->makeReference())
                                 )
-                                ->setSearchTerms("IMS AND (Caliper OR Analytics)")
+                                ->setSearchTerms('IMS AND (Caliper OR Analytics)')
                                 ->setDateCreated(
                                     new \DateTime('2018-11-15T10:05:00.000Z'))
                         )
                         ->setSearchResultsItemCount(3)
-                        ->setSearchResults([
-                            "https://example.edu/catalog/record/01234?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29",
-                            "https://example.edu/catalog/record/09876?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29",
-                            "https://example.edu/catalog/record/05432?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29"
-                        ])
                 )
                 ->setEventTime(
                     new \DateTime('2018-11-15T10:05:00.000Z'))

@@ -1,6 +1,7 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Organization;
 use IMSGlobal\Caliper\entities\agent\Person;
@@ -30,6 +31,8 @@ class EventToolLaunchReturnedTest extends CaliperTestCase {
                 ->setActor(
                     (new Person('https://example.edu/users/554433'))
                 )
+                ->setProfile(
+                    new Profile(Profile::TOOL_LAUNCH))
                 ->setAction(
                     new Action(Action::RETURNED))
                 ->setObject(
@@ -45,8 +48,8 @@ class EventToolLaunchReturnedTest extends CaliperTestCase {
                 )
                 ->setGroup(
                     (new CourseSection('https://example.edu/terms/201801/courses/7/sections/1'))
-                        ->setCourseNumber("CPS 435-01")
-                        ->setAcademicSession("Fall 2018")
+                        ->setCourseNumber('CPS 435-01')
+                        ->setAcademicSession('Fall 2018')
                 )
                 ->setMembership(
                     (new Membership('https://example.edu/terms/201801/courses/7/sections/1/rosters/1'))

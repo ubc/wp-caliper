@@ -37,6 +37,9 @@ class EntityDigitalResourceCollectionTest extends CaliperTestCase {
                             ->setName(
                                 'Introduction to IMS Caliper'
                             )
+                            ->setStorageName(
+                                'caliper-intro.ogg'
+                            )
                             ->setDateCreated(
                                 new \DateTime('2016-08-01T06:00:00.000Z'))
                             ->setDuration(
@@ -52,6 +55,9 @@ class EntityDigitalResourceCollectionTest extends CaliperTestCase {
                             )
                             ->setName(
                                 'IMS Caliper Activity Profiles'
+                            )
+                            ->setStorageName(
+                                'caliper-activity-profiles.ogg'
                             )
                             ->setDateCreated(
                                 new \DateTime('2016-08-01T06:00:00.000Z'))

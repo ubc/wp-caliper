@@ -2,6 +2,7 @@
 
 namespace IMSGlobal\Caliper\events;
 
+use IMSGlobal\Caliper\profiles;
 use IMSGlobal\Caliper\actions;
 use IMSGlobal\Caliper\context;
 use IMSGlobal\Caliper\entities;
@@ -14,6 +15,8 @@ class Event extends util\ClassUtil implements \JsonSerializable {
     private $type;
     /** @var entities\foaf\Agent */
     private $actor;
+    /** @var profiles\Profile */
+    private $profile;
     /** @var actions\Action */
     private $action;
     /** @var entities\Entity */
@@ -56,6 +59,7 @@ class Event extends util\ClassUtil implements \JsonSerializable {
             '@context' => $this->getContext(),
             'type' => $this->getType(),
             'actor' => $this->getActor(),
+            'profile' => $this->getProfile(),
             'action' => $this->getAction(),
             'object' => $this->getObject(),
             'target' => $this->getTarget(),
@@ -137,6 +141,20 @@ class Event extends util\ClassUtil implements \JsonSerializable {
      */
     public function setActor(entities\foaf\Agent $actor) {
         $this->actor = $actor;
+        return $this;
+    }
+
+    /** @return profiles\Profile profile */
+    public function getProfile() {
+        return $this->profile;
+    }
+
+    /**
+     * @param profiles\Profile $profile
+     * @return $this|Event
+     */
+    public function setProfile(profiles\Profile $profile) {
+        $this->profile = $profile;
         return $this;
     }
 

@@ -1,6 +1,7 @@
 <?php
 require_once 'CaliperTestCase.php';
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Person;
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
@@ -26,6 +27,8 @@ class EventGradeGradedTest extends CaliperTestCase {
                             'v2'
                         )
                 )
+                ->setProfile(
+                    new Profile(Profile::GRADING))
                 ->setAction(
                     new Action(Action::GRADED))
                 ->setObject(

@@ -20,6 +20,9 @@ class EntityDigitalResourceTest extends CaliperTestCase {
                 ->setName(
                     'Course Syllabus'
                 )
+                ->setStorageName(
+                    'fall-2016-syllabus.pdf'
+                )
                 ->setMediaType(
                     'application/pdf'
                 )

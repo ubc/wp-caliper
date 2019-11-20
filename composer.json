@@ -7,11 +7,11 @@
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/IMSGlobal/caliper-php"
+            "url": "https://github.com/andrew-gardener/caliper-php"
         }
     ],
     "require": {
-        "imsglobal/caliper": "dev-develop#05f5eab0fc7fd14af44a410f0b65aff1d0e02d0a as 1.1.0"
+        "imsglobal/caliper": "dev-develop-v1p2#fa595784e7ed1015cad2341ac6e5e1819e2cd443 as 1.2.0"
     },
     "autoload": {
         "files": [

@@ -45,6 +45,8 @@ class DigitalResource extends Entity implements Referrable, Targetable, Generata
     private $datePublished;
     /** @var string */
     private $version;
+    /** @var string */
+    private $storageName;
 
     public function __construct($id) {
         parent::__construct($id);
@@ -63,6 +65,7 @@ class DigitalResource extends Entity implements Referrable, Targetable, Generata
             'isPartOf' => $this->getIsPartOf(),
             'datePublished' => TimestampUtil::formatTimeISO8601MillisUTC($this->getDatePublished()),
             'version' => $this->getVersion(),
+            'storageName' => $this->getStorageName(),
         ]));
     }
 
@@ -239,6 +242,25 @@ class DigitalResource extends Entity implements Referrable, Targetable, Generata
         }
 
         $this->version = $version;
+        return $this;
+    }
+
+    /** @return string storageName */
+    public function getStorageName() {
+        return $this->storageName;
+    }
+
+    /**
+     * @param string $storageName
+     * @throws \InvalidArgumentException string required
+     * @return $this|DigitalResource
+     */
+    public function setStorageName($storageName) {
+        if (!is_string($storageName)) {
+            throw new \InvalidArgumentException(__METHOD__ . ': string expected');
+        }
+
+        $this->storageName = $storageName;
         return $this;
     }
 }

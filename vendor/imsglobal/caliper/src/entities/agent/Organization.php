@@ -4,7 +4,7 @@ namespace IMSGlobal\Caliper\entities\agent;
 
 use IMSGlobal\Caliper\entities;
 
-class Organization extends entities\Entity implements entities\foaf\Agent, entities\w3c\Organization {
+class Organization extends Agent implements entities\foaf\Agent, entities\w3c\Organization {
     /** @var entities\w3c\Organization */
     private $subOrganizationOf;
     /** @var entities\foaf\Agent[] */

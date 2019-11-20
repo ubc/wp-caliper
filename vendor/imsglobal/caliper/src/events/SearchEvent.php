@@ -4,7 +4,6 @@ namespace IMSGlobal\Caliper\events;
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
 use IMSGlobal\Caliper\entities\search\SearchResponse;
 use IMSGlobal\Caliper\entities\Generatable;
-use IMSGlobal\Caliper\context\Context;
 
 
 class SearchEvent extends Event {
@@ -14,7 +13,6 @@ class SearchEvent extends Event {
     public function __construct($id = null) {
         parent::__construct($id);
         $this->setType(new EventType(EventType::SEARCH));
-        $this->setContext(new Context(Context::SEARCH_PROFILE_EXTENSION));
     }
 
     /** @return SearchResponse generated */

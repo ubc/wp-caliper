@@ -5,7 +5,6 @@ namespace IMSGlobal\Caliper\entities\search;
 use IMSGlobal\Caliper\entities\Entity;
 use IMSGlobal\Caliper\entities\agent\Person;
 use IMSGlobal\Caliper\entities;
-use IMSGlobal\Caliper\context\Context;
 
 class Query extends Entity implements entities\Referrable {
     /** @var Person|null */
@@ -18,7 +17,6 @@ class Query extends Entity implements entities\Referrable {
     public function __construct($id) {
         parent::__construct($id);
         $this->setType(new entities\EntityType(entities\EntityType::QUERY));
-        $this->setContext(new Context(Context::SEARCH_PROFILE_EXTENSION));
     }
 
     public function jsonSerialize() {

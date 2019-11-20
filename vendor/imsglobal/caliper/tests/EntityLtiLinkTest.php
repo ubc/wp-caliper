@@ -13,7 +13,7 @@ class EntityLtiLinkTest extends CaliperTestCase {
 
         $this->setTestObject(
             (new LtiLink('https://tool.com/link/123'))
-                ->setMessageType("LtiResourceLinkRequest")
+                ->setMessageType('LtiResourceLinkRequest')
         );
     }
 }

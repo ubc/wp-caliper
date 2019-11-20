@@ -6,7 +6,7 @@ use IMSGlobal\Caliper\entities;
 use IMSGlobal\Caliper\entities\assignable\Attempt;
 use IMSGlobal\Caliper\util;
 
-abstract class Response extends entities\Entity implements entities\Generatable {
+class Response extends entities\Entity implements entities\Generatable {
     /** @var Attempt */
     private $attempt;
     /** @var \DateTime */

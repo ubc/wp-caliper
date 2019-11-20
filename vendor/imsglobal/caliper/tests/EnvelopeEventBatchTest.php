@@ -1,4 +1,5 @@
 <?php
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\Organization;
 use IMSGlobal\Caliper\entities\agent\Person;
@@ -30,11 +31,12 @@ class EnvelopeEventBatchTest extends CaliperTestCase {
         $this->setTestObject((new \IMSGlobal\Caliper\request\Envelope())
             ->setSendTime(new \DateTime('2016-11-15T11:05:01.000Z'))
             ->setSensorId(new Sensor('https://example.edu/sensors/1'))
-            ->setDataVersion('http://purl.imsglobal.org/ctx/caliper/v1p1')
+            ->setDataVersion('http://purl.imsglobal.org/ctx/caliper/v1p2')
             ->setData([
                 (new NavigationEvent())
                     ->setActor((new Person('https://example.edu/users/554433'))
                     )
+                    ->setProfile(new Profile(Profile::GENERAL))
                     ->setAction(new Action(Action::NAVIGATED_TO))
                     ->setObject((new WebPage('https://example.edu/terms/201601/courses/7/sections/1/pages/2'))
                         ->setName('Learning Analytics Specifications')
@@ -70,6 +72,7 @@ class EnvelopeEventBatchTest extends CaliperTestCase {
                 (new AnnotationEvent())
                     ->setActor((new Person('https://example.edu/users/554433'))
                     )
+                    ->setProfile(new Profile(Profile::ANNOTATION))
                     ->setAction(new Action(Action::BOOKMARKED))
                     ->setObject((new Document('https://example.com/#/texts/imscaliperimplguide'))
                         ->setName('IMS Caliper Implementation Guide')
@@ -102,6 +105,7 @@ class EnvelopeEventBatchTest extends CaliperTestCase {
                 (new ViewEvent())
                     ->setActor((new Person('https://example.edu/users/554433'))
                     )
+                    ->setProfile(new Profile(Profile::READING))
                     ->setAction(new Action(Action::VIEWED))
                     ->setObject((new Document('https://example.edu/etexts/201.epub'))
                         ->setName('IMS Caliper Implementation Guide')

@@ -1,5 +1,8 @@
 <?php
 use IMSGlobal\Caliper\entities\agent\Person;
+use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
+use IMSGlobal\Caliper\entities\SystemIdentifier;
+use IMSGlobal\Caliper\entities\SystemIdentifierType;
 use IMSGlobal\Caliper\entities\DigitalResourceCollection;
 use IMSGlobal\Caliper\entities\lis\CourseOffering;
 use IMSGlobal\Caliper\entities\lis\CourseSection;
@@ -21,6 +24,17 @@ class EnvelopeEntityBatchTest extends CaliperTestCase {
             ->setSendTime(new \DateTime('2016-11-15T11:05:01.000Z'))
             ->setData([
                 (new Person('https://example.edu/users/554433'))
+                    ->setOtherIdentifiers([
+                        (new SystemIdentifier('example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4', new SystemIdentifierType(SystemIdentifierType::LIS_SOURCED_ID))),
+                        (new SystemIdentifier('https://example.edu/users/554433', new SystemIdentifierType(SystemIdentifierType::LTI_USERID)))
+                            ->setSource( (new SoftwareApplication('https://example.edu')) ),
+                        (new SystemIdentifier('jane@example.edu', new SystemIdentifierType(SystemIdentifierType::EMAIL_ADDRESS)))
+                            ->setSource( (new SoftwareApplication('https://example.edu'))->makeReference() ),
+                        (new SystemIdentifier('4567', new SystemIdentifierType(SystemIdentifierType::SYSTEM_ID)))
+                            ->setExtensions([
+                                'com.examplePlatformVendor.identifier_type' => 'UserIdentifier'
+                            ]),
+                    ])
                     ->setDateCreated(new \DateTime('2016-08-01T06:00:00.000Z'))
                     ->setDateModified(new \DateTime('2016-09-02T11:30:00.000Z')),
                 (new Document('https://example.edu/etexts/201.epub'))
@@ -37,12 +51,14 @@ class EnvelopeEntityBatchTest extends CaliperTestCase {
                         (new VideoObject('https://example.edu/videos/1225'))
                             ->setMediaType('video/ogg')
                             ->setName('Introduction to IMS Caliper')
+                            ->setStorageName('caliper-intro.ogg')
                             ->setDateCreated(new \DateTime('2016-08-01T06:00:00.000Z'))
                             ->setDuration('PT1H12M27S')
                             ->setVersion('1.1'),
                         (new VideoObject('https://example.edu/videos/5629'))
                             ->setMediaType('video/ogg')
                             ->setName('IMS Caliper Activity Profiles')
+                            ->setStorageName('caliper-activity-profiles.ogg')
                             ->setDateCreated(new \DateTime('2016-08-01T06:00:00.000Z'))
                             ->setDuration('PT55M13S')
                             ->setVersion('1.1.1'),

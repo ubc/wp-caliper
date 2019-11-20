@@ -8,5 +8,6 @@ class MediaObjectType extends Caliper\util\BasicEnum implements Caliper\entities
         __default = '',
         AUDIO_OBJECT = 'AudioObject',
         IMAGE_OBJECT = 'ImageObject',
+        MEDIA_OBJECT = 'MediaObject',
         VIDEO_OBJECT = 'VideoObject';
 }

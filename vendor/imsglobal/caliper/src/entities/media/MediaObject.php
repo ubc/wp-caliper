@@ -4,12 +4,13 @@ namespace IMSGlobal\Caliper\entities\media;
 
 use IMSGlobal\Caliper\entities;
 
-abstract class MediaObject extends entities\DigitalResource implements entities\schemadotorg\MediaObject {
+class MediaObject extends entities\DigitalResource implements entities\schemadotorg\MediaObject {
     /** @var string|null ISO 8601 interval */
     private $duration;
 
     public function __construct($id) {
         parent::__construct($id);
+        $this->setType(new MediaObjectType(MediaObjectType::MEDIA_OBJECT));
     }
 
     public function jsonSerialize() {
