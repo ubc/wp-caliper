@@ -68,6 +68,12 @@ Nothing yet.
 
 == Changelog ==
 
+= 1.1.0 =
+* Updated to Caliper v1p2
+* switched to php-caliper dev-develop-v1p2#fa595784e7ed1015cad2341ac6e5e1819e2cd443 for Caliper v1p2 support
+* Added Restored resource management event to posts
+* Modified PulsePress vote and star events to use the Feedback Profile
+
 = 1.0.3 =
 * switched to php-caliper dev-develop#05f5eab0fc7fd14af44a410f0b65aff1d0e02d0a which adds Resource Management Profile support
 * modified Created, Modified, Deleted to emit resource management events (instead of basic)

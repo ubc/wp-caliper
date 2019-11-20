@@ -12,6 +12,9 @@ use WPCaliperPlugin\caliper\CaliperSensor;
  */
 class AjaxHookTest extends WP_Ajax_UnitTestCase {
 
+	/**
+	 * Setup tests
+	 */
 	function setUp() {
 		global $wp_version;
 		parent::setUp();
@@ -25,20 +28,6 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 			)
 		);
 		wp_set_current_user( $this->user->ID );
-
-		$this->post = $this->factory->post->create_and_get();
-		$this->go_to( get_permalink( $this->post->ID ) );
-
-		$this->comment = $this->factory->comment->create_and_get(
-			array(
-				'user_id'            => $this->user->ID,
-				'comment_author_url' => 'http://example.com/' . $this->user->ID . '/',
-				'comment_post_ID'    => $this->post->ID,
-			)
-		);
-
-		// update post data for comment count.
-		$this->post = get_post( $this->post->ID );
 
 		$this->expected_ed_app = array(
 			'id'      => $this->home_url,
@@ -54,74 +43,39 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 			'dateCreated' => $this->wp_date_to_iso8601( $this->user->user_registered ),
 		);
 
-		$this->expected_site = array(
-			'id'          => 'http://example.org',
-			'type'        => 'DigitalResource',
-			'name'        => 'Test Blog',
-			'description' => 'Just another WordPress site',
-		);
-
-		$this->expected_post = array(
-			'id'           => 'http://example.org?p=' . $this->post->ID,
-			'type'         => 'WebPage',
-			'name'         => get_the_title( $this->post ),
-			'description'  => $this->post->post_content,
-			'extensions'   => array(
-				'post'          => true,
-				'permalink'     => 'http://example.org/?p=' . $this->post->ID,
-				'postType'      => 'post',
-				'postStatus'    => 'publish',
-				'commentStatus' => 'open',
-				'pingStatus'    => 'open',
-				'commentCount'  => '1',
-				'menuOrder'     => 0,
-			),
-			'dateCreated'  => $this->wp_date_to_iso8601( $this->post->post_date ),
-			'dateModified' => $this->wp_date_to_iso8601( $this->post->post_modified ),
-			'creators'     => array(
-				$this->expected_actor,
-			),
-			'isPartOf'     => $this->expected_site,
-		);
-
-		$this->expected_comment = array(
-			'id'          => 'http://example.org?p=' . $this->post->ID . '#comment=' . $this->comment->comment_ID,
-			'type'        => 'Message',
-			'extensions'  => array(
-				'karma'     => '0',
-				'approved'  => '1',
-				'type'      => '',
-				'authorUrl' => 'http://example.com/' . $this->user->ID.'/',
-			),
-			'dateCreated' => $this->wp_date_to_iso8601( $this->comment->comment_date ),
-			'isPartOf'    => $this->expected_post,
-			'body'        => 'This is a comment',
-		);
-
-		CaliperSensor::setSendEvents( false );
+		CaliperSensor::set_send_events( false );
 	}
 
+	/**
+	 * Tear down tests
+	 */
 	function tearDown() {
 		parent::tearDown();
 	}
 
+	/**
+	 * Helper function
+	 */
 	function wp_date_to_iso8601( $string ) {
 		$timestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $string );
 		$timestamp->setTimezone( new \DateTimeZone( 'UTC' ) );
 		return substr( $timestamp->format( 'Y-m-d\TH:i:s.u' ), 0, -3 ) . 'Z'; // truncate μs to ms.
 	}
 
+	/**
+	 * Validate and remove common fields
+	 */
 	function cleanup_event_json( $event_json ) {
 
 		$envelope = json_decode( $event_json, true );
 
 		$this->assertSame( $envelope['sensor'], $this->home_url );
 		$this->assertNotNull( $envelope['sendTime'] );
-		$this->assertSame( $envelope['dataVersion'], 'http://purl.imsglobal.org/ctx/caliper/v1p1' );
+		$this->assertSame( $envelope['dataVersion'], 'http://purl.imsglobal.org/ctx/caliper/v1p2' );
 		$this->assertCount( 1, $envelope['data'] );
 
 		$event = $envelope['data'][0];
-		$this->assertSame( $event['@context'], 'http://purl.imsglobal.org/ctx/caliper/v1p1' );
+		$this->assertSame( $event['@context'], 'http://purl.imsglobal.org/ctx/caliper/v1p2' );
 		unset( $event['@context'] );
 
 		$this->assertNotNull( $event['id'] );
@@ -139,11 +93,18 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 		$this->assertNotNull( $event['session']['id'] );
 		unset( $event['session']['id'] );
 
+		$this->assertNotNull( $event['session']['client']['id'] );
+		unset( $event['session']['client']['id'] );
+
 		$this->assertSame(
 			$event['session'],
 			array(
-				'type' => 'Session',
-				'user' => $this->expected_actor,
+				'type'   => 'Session',
+				'client' => array(
+					'type'      => 'SoftwareApplication',
+					'ipAddress' => '127.0.0.1',
+				),
+				'user'   => $this->expected_actor,
 			)
 		);
 		unset( $event['session'] );
@@ -151,6 +112,9 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 		return $event;
 	}
 
+	/**
+	 * Enable Caliper for tests
+	 */
 	function _enable_caliper() {
 		add_site_option(
 			'wp_caliper_network_settings',
@@ -189,6 +153,7 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 
 		$expected_event = array(
 			'type'       => 'NavigationEvent',
+			'profile'    => 'ReadingProfile',
 			'action'     => 'NavigatedTo',
 			'object'     => array(
 				'id'   => 'http://some.other.website.com/',
@@ -200,9 +165,6 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 				'queryString'      => '',
 				'absolutePath'     => 'http://some.other.website.com/',
 				'absoluteUrl'      => 'http://some.other.website.com/',
-				'browser-info'     => array(
-					'ipAddress' => '127.0.0.1',
-				),
 			),
 		);
 		$this->_enable_caliper();
@@ -214,7 +176,7 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 		}
 
 		WPCaliperPlugin\wp_caliper_log_link_click();
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );

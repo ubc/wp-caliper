@@ -1,72 +1,75 @@
 {
     "sensor": "https://testwordpress.xx",
     "sendTime": "2018-11-08T19:52:26.000Z",
-    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p2",
     "data": [{
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension",
-    "type": "ResourceManagementEvent",
-    "actor": {
-        "id": "http://www.ubc.ca/PUID123ROOT",
-        "type": "Person",
-        "name": "root",
-        "dateCreated": "2018-11-08T19:52:26.000Z"
-    },
-    "action": "Created",
-    "object": {
-        "id": "http://wordpress/course1?p=15",
-        "type": "WebPage",
-        "name": "Auto Draft",
-        "description": "",
-        "extensions": {
-            "post": true,
-            "permalink": "http://wordpress/course1/?p=15",
-            "postType": "post",
-            "postStatus": "auto-draft",
-            "commentStatus": "open",
-            "pingStatus": "open",
-            "commentCount": "0",
-            "menuOrder": 0
-        },
-        "dateCreated": "2018-11-20T21:36:37.000Z",
-        "dateModified": "2018-11-20T21:36:37.000Z",
-        "creators": [
-            {
-                "id": "http://www.ubc.ca/PUID123ROOT",
-                "type": "Person",
-                "name": "root",
-                "dateCreated": "2018-11-08T19:52:26.000Z"
-            }
-        ],
-        "isPartOf": {
-            "id": "http://wordpress/course1",
-            "type": "DigitalResource",
-            "name": "course 1",
-            "description": "Just another site !!!!!"
-        }
-    },
-    "eventTime": "2018-11-20T21:36:37.000Z",
-    "edApp": {
-        "id": "http://wordpress/",
-        "type": "SoftwareApplication",
-        "name": "WordPress",
-        "version": "4.9.8"
-    },
-    "session": {
-        "id": "http://wordpress/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
-        "type": "Session",
-        "user": {
+        "@context": "http://purl.imsglobal.org/ctx/caliper/v1p2",
+        "type": "ResourceManagementEvent",
+        "actor": {
             "id": "http://www.ubc.ca/PUID123ROOT",
             "type": "Person",
             "name": "root",
             "dateCreated": "2018-11-08T19:52:26.000Z"
-        }
-    },
-    "id": "urn:uuid:98b72190-f1dc-44c1-81dc-c80301f9446b",
-    "extensions": {
-        "browser-info": {
-            "referer": "http://wordpress/course1/2018/11/17/sdfsfsf/",
-            "ipAddress": "172.18.0.1"
-        }
-    }
- }]
+        },
+        "profile": "ResourceManagementProfile",
+        "action": "Created",
+        "object": {
+            "id": "http://wordpress/course1?p=15",
+            "type": "WebPage",
+            "name": "Auto Draft",
+            "description": "",
+            "extensions": {
+                "post": true,
+                "permalink": "http://wordpress/course1/?p=15",
+                "postType": "post",
+                "postStatus": "auto-draft",
+                "commentStatus": "open",
+                "pingStatus": "open",
+                "commentCount": "0",
+                "menuOrder": 0
+            },
+            "dateCreated": "2018-11-20T21:36:37.000Z",
+            "dateModified": "2018-11-20T21:36:37.000Z",
+            "creators": [
+                {
+                    "id": "http://www.ubc.ca/PUID123ROOT",
+                    "type": "Person",
+                    "name": "root",
+                    "dateCreated": "2018-11-08T19:52:26.000Z"
+                }
+            ],
+            "isPartOf": {
+                "id": "http://wordpress/course1",
+                "type": "DigitalResource",
+                "name": "course 1",
+                "description": "Just another site !!!!!"
+            }
+        },
+        "eventTime": "2018-11-20T21:36:37.000Z",
+        "edApp": {
+            "id": "http://wordpress/",
+            "type": "SoftwareApplication",
+            "name": "WordPress",
+            "version": "4.9.8"
+        },
+        "session": {
+            "id": "http://wordpress/course1/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+            "type": "Session",
+            "client": {
+                "id": "http://wordpress/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N#client",
+                "type": "SoftwareApplication",
+                "ipAddress": "172.18.0.1"
+            },
+            "user": {
+                "id": "http://www.ubc.ca/PUID123ROOT",
+                "type": "Person",
+                "name": "root",
+                "dateCreated": "2018-11-08T19:52:26.000Z"
+            },
+            "extensions": {
+                "referer": "http://wordpress/course1/2018/11/17/sdfsfsf/"
+            }
+        },
+        "id": "urn:uuid:98b72190-f1dc-44c1-81dc-c80301f9446b"
+    }]
 }

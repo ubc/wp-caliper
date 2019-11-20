@@ -12,24 +12,24 @@
             "dateCreated": "2018-11-08T19:52:26.000Z"
         },
         "profile": "ResourceManagementProfile",
-        "action": "Unpublished",
+        "action": "Restored",
         "object": {
-            "id": "http://wordpress/course1?p=15",
+            "id": "http://wordpress/course1?p=19",
             "type": "WebPage",
             "name": "New Post",
-            "description": "New Post content",
+            "description": "test content",
             "extensions": {
                 "post": true,
-                "permalink": "http://wordpress/course1/?p=15",
+                "permalink": "http://wordpress/course1/2018/11/20/new-post__trashed/",
                 "postType": "post",
-                "postStatus": "pending",
+                "postStatus": "trash",
                 "commentStatus": "open",
                 "pingStatus": "open",
                 "commentCount": "0",
                 "menuOrder": 0
             },
-            "dateCreated": "2018-11-20T21:49:08.000Z",
-            "dateModified": "2018-11-20T21:50:16.000Z",
+            "dateCreated": "2018-11-20T21:54:13.000Z",
+            "dateModified": "2018-11-20T21:54:30.000Z",
             "creators": [
                 {
                     "id": "http://www.ubc.ca/PUID123ROOT",
@@ -45,7 +45,7 @@
                 "description": "Just another site !!!!!"
             }
         },
-        "eventTime": "2018-11-20T21:50:16.000Z",
+        "eventTime": "2018-11-20T21:54:30.000Z",
         "edApp": {
             "id": "http://wordpress/",
             "type": "SoftwareApplication",
@@ -67,9 +67,9 @@
                 "dateCreated": "2018-11-08T19:52:26.000Z"
             },
             "extensions": {
-                "referer": "http://wordpress/course1/wp-admin/post.php?post=15&action=edit"
+                "referer": "http://wordpress/course1/wp-admin/post.php?post=19&action=edit"
             }
         },
-        "id": "urn:uuid:8ca3b7ec-03b9-4419-ad1d-f3afba92438b"
+        "id": "urn:uuid:9f04989c-143b-448a-b7c6-9a078b863942"
     }]
 }

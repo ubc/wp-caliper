@@ -129,6 +129,8 @@ Unpublish Example: [transition_post_status_unpublish.json](examples/transition_p
 
 Delete Example: [transition_post_status_delete.json](examples/transition_post_status_delete.json)
 
+Restored Example: [transition_post_status_restored.json](examples/transition_post_status_restored.json)
+
 Captures state transitions for posts (published, unpublished, deleted).
 
 

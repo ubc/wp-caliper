@@ -2,11 +2,13 @@
 namespace WPCaliperPlugin;
 
 use IMSGlobal\Caliper\events\Event;
+use IMSGlobal\Caliper\events\FeedbackEvent;
 use IMSGlobal\Caliper\events\ResourceManagementEvent;
 use IMSGlobal\Caliper\events\NavigationEvent;
 use IMSGlobal\Caliper\events\SessionEvent;
 
 use IMSGlobal\Caliper\actions\Action;
+use IMSGlobal\Caliper\profiles\Profile;
 
 use IMSGlobal\Caliper\entities\agent\Organization;
 use IMSGlobal\Caliper\entities\agent\Person;
@@ -59,6 +61,7 @@ function wp_caliper_log_link_click() {
 	}
 
 	$event = ( new NavigationEvent() )
+		->setProfile( new Profile( Profile::READING ) )
 		->setAction( new Action( Action::NAVIGATED_TO ) )
 		->setObject( CaliperEntity::webpage( $click_url_requested ) );
 
@@ -74,7 +77,7 @@ function wp_caliper_log_link_click() {
 		]
 	);
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 
@@ -102,17 +105,18 @@ function wp_caliper_badgeos_award_achievement( $user_id, $achievement_id ) {
 	$assertion_uid = $post->ID . '-' . get_post_time( 'U', true ) . '-' . $current_user->ID;
 
 	$event = ( new Event() )
+		->setProfile( new Profile( Profile::GENERAL ) )
 		->setAction( new Action( Action::COMPLETED ) )
 		->setObject( CaliperEntity::post( $post ) );
 
 	$event->setExtensions(
 		[
 			'badgeEarned'    => true,
-			'badgeAssertion' => ResourceIRI::badgeAssertion( $assertion_uid ),
+			'badgeAssertion' => ResourceIRI::badge_assertion( $assertion_uid ),
 		]
 	);
 
-	CaliperSensor::sendEvent( $event, $current_user );
+	CaliperSensor::send_event( $event, $current_user );
 }
 
 /**
@@ -132,9 +136,10 @@ function wp_caliper_shutdown() {
 		return;
 	}
 
-	$current_url = ResourceIRI::currentPageUrl();
+	$current_url = ResourceIRI::current_page_url();
 
 	$event = ( new NavigationEvent() )
+		->setProfile( new Profile( Profile::READING ) )
 		->setAction( new Action( Action::NAVIGATED_TO ) );
 
 	if ( $post && empty( $post->ID ) ) {
@@ -153,7 +158,7 @@ function wp_caliper_shutdown() {
 		]
 	);
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 
@@ -172,10 +177,11 @@ function wp_caliper_comment_post( $comment_id ) {
 	}
 
 	$event = ( new ResourceManagementEvent() )
+		->setProfile( new Profile( Profile::RESOURCE_MANAGEMENT ) )
 		->setAction( new Action( Action::CREATED ) )
 		->setObject( CaliperEntity::comment( $comment ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -193,10 +199,11 @@ function wp_caliper_edit_comment( $comment_id ) {
 	}
 
 	$event = ( new ResourceManagementEvent() )
+		->setProfile( new Profile( Profile::RESOURCE_MANAGEMENT ) )
 		->setAction( new Action( Action::MODIFIED ) )
 		->setObject( CaliperEntity::comment( $comment ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -209,6 +216,7 @@ function wp_caliper_transition_comment_status( $new_status, $old_status, $commen
 	}
 
 	$event = ( new ResourceManagementEvent() )
+		->setProfile( new Profile( Profile::RESOURCE_MANAGEMENT ) )
 		->setObject( CaliperEntity::comment( $comment ) );
 
 	if ( 'trash' === $new_status ) {
@@ -221,7 +229,7 @@ function wp_caliper_transition_comment_status( $new_status, $old_status, $commen
 		return;
 	}
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -235,17 +243,13 @@ function wp_caliper_pulse_press_vote_up( $post_id ) {
 
 	$post = get_post( $post_id );
 
-	$event = ( new Event() )
+	$event = ( new FeedbackEvent() )
+		->setProfile( new Profile( Profile::FEEDBACK ) )
 		->setAction( new Action( Action::RANKED ) )
 		->setObject( CaliperEntity::post( $post ) )
-		->setExtensions(
-			[
-				'upVote' => true,
-				'vote'   => 1,
-			]
-		);
+		->setGenerated( CaliperEntity::pulse_press_vote_rating( wp_get_current_user(), $post, '1' ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -259,17 +263,13 @@ function wp_caliper_pulse_press_vote_down( $post_id ) {
 
 	$post = get_post( $post_id );
 
-	$event = ( new Event() )
+	$event = ( new FeedbackEvent() )
+		->setProfile( new Profile( Profile::FEEDBACK ) )
 		->setAction( new Action( Action::RANKED ) )
 		->setObject( CaliperEntity::post( $post ) )
-		->setExtensions(
-			[
-				'downVote' => true,
-				'vote'     => -1,
-			]
-		);
+		->setGenerated( CaliperEntity::pulse_press_vote_rating( wp_get_current_user(), $post, '-1' ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -283,17 +283,13 @@ function wp_caliper_pulse_press_vote_delete( $post_id ) {
 
 	$post = get_post( $post_id );
 
-	$event = ( new Event() )
+	$event = ( new FeedbackEvent() )
+		->setProfile( new Profile( Profile::FEEDBACK ) )
 		->setAction( new Action( Action::RANKED ) )
 		->setObject( CaliperEntity::post( $post ) )
-		->setExtensions(
-			[
-				'resetVote' => true,
-				'vote'      => 0,
-			]
-		);
+		->setGenerated( CaliperEntity::pulse_press_vote_rating( wp_get_current_user(), $post, '0' ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -307,16 +303,13 @@ function wp_caliper_pulse_press_star_add( $post_id ) {
 
 	$post = get_post( $post_id );
 
-	$event = ( new Event() )
+	$event = ( new FeedbackEvent() )
+		->setProfile( new Profile( Profile::FEEDBACK ) )
 		->setAction( new Action( Action::RANKED ) )
 		->setObject( CaliperEntity::post( $post ) )
-		->setExtensions(
-			[
-				'favorited' => true,
-			]
-		);
+		->setGenerated( CaliperEntity::pulse_press_star_rating( wp_get_current_user(), $post, 'true' ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -330,16 +323,13 @@ function wp_caliper_pulse_press_star_delete( $post_id ) {
 
 	$post = get_post( $post_id );
 
-	$event = ( new Event() )
+	$event = ( new FeedbackEvent() )
+		->setProfile( new Profile( Profile::FEEDBACK ) )
 		->setAction( new Action( Action::RANKED ) )
 		->setObject( CaliperEntity::post( $post ) )
-		->setExtensions(
-			[
-				'unfavorited' => true,
-			]
-		);
+		->setGenerated( CaliperEntity::pulse_press_star_rating( wp_get_current_user(), $post, 'false' ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -358,6 +348,7 @@ function wp_caliper_save_post( $post_id, $post, $update ) {
 	}
 
 	$event = ( new ResourceManagementEvent() )
+		->setProfile( new Profile( Profile::RESOURCE_MANAGEMENT ) )
 		->setObject( CaliperEntity::post( $post ) );
 
 	if ( $update ) {
@@ -366,7 +357,7 @@ function wp_caliper_save_post( $post_id, $post, $update ) {
 		$event->setAction( new Action( Action::CREATED ) );
 	}
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -385,16 +376,13 @@ function wp_caliper_transition_post_status( $new_status, $old_status, $post ) {
 	}
 
 	$event = ( new ResourceManagementEvent() )
+		->setProfile( new Profile( Profile::RESOURCE_MANAGEMENT ) )
 		->setObject( CaliperEntity::post( $post ) );
 
 	if ( 'trash' === $new_status ) {
 		$event->setAction( new Action( Action::DELETED ) );
-
-		/*
-		 * TODO: Add Restored action with resource management profile
-		 * } elseif ( 'trash' === $old_status && 'trash' !== $new_status ) {
-		 *     $event->setAction( new Action( Action:: ) );
-		 */
+	} elseif ( 'trash' === $old_status && 'trash' !== $new_status ) {
+		$event->setAction( new Action( Action::RESTORED ) );
 	} elseif ( 'publish' === $old_status && 'publish' !== $new_status ) {
 		$event->setAction( new Action( Action::UNPUBLISHED ) );
 	} elseif ( 'publish' === $new_status && 'publish' !== $old_status ) {
@@ -403,7 +391,7 @@ function wp_caliper_transition_post_status( $new_status, $old_status, $post ) {
 		return;
 	}
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -418,10 +406,11 @@ function wp_caliper_add_attachment( $post_id ) {
 	$post = get_post( $post_id );
 
 	$event = ( new ResourceManagementEvent() )
+		->setProfile( new Profile( Profile::RESOURCE_MANAGEMENT ) )
 		->setAction( new Action( Action::CREATED ) )
 		->setObject( CaliperEntity::post( $post ) );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 /**
@@ -434,10 +423,11 @@ function wp_caliper_wp_login( $user_login, $user ) {
 	}
 
 	$event = ( new SessionEvent() )
+		->setProfile( new Profile( Profile::SESSION ) )
 		->setAction( new Action( Action::LOGGED_IN ) )
-		->setObject( CaliperEntity::wordPress() );
+		->setObject( CaliperEntity::word_press() );
 
-	CaliperSensor::sendEvent( $event, $user );
+	CaliperSensor::send_event( $event, $user );
 }
 
 
@@ -447,8 +437,9 @@ function wp_caliper_wp_login( $user_login, $user ) {
 add_action( 'clear_auth_cookie', 'WPCaliperPlugin\\wp_caliper_clear_auth_cookie', 10, 0 );
 function wp_caliper_clear_auth_cookie() {
 	$event = ( new SessionEvent() )
+		->setProfile( new Profile( Profile::SESSION ) )
 		->setAction( new Action( Action::LOGGED_OUT ) )
-		->setObject( CaliperEntity::wordPress() );
+		->setObject( CaliperEntity::word_press() );
 
-	CaliperSensor::sendEvent( $event, wp_get_current_user() );
+	CaliperSensor::send_event( $event, wp_get_current_user() );
 }

@@ -12,6 +12,9 @@ use WPCaliperPlugin\caliper\CaliperSensor;
  */
 class HookTest extends WP_UnitTestCase {
 
+	/**
+	 * Setup tests
+	 */
 	function setUp() {
 		global $wp_version;
 		parent::setUp();
@@ -98,34 +101,81 @@ class HookTest extends WP_UnitTestCase {
 			'body'        => 'This is a comment',
 		);
 
-		CaliperSensor::setSendEvents( false );
+		$this->expected_vote_question = array(
+			'id'    => 'http://example.org#pulse_press_vote_question',
+			'type'  => 'RatingScaleQuestion',
+			'scale' => array(
+				'id'          => 'http://example.org#pulse_press_vote_scale',
+				'type'        => 'LikertScale',
+				'scalePoints' => 3,
+				'itemLabels'  => array( 'Vote Up', 'Unvote', 'Vote Down' ),
+				'itemValues'  => array( '1', '0', '-1' ),
+			),
+		);
+
+		$this->expected_star_question = array(
+			'id'    => 'http://example.org#pulse_press_star_question',
+			'type'  => 'RatingScaleQuestion',
+			'scale' => array(
+				'id'          => 'http://example.org#pulse_press_star_scale',
+				'type'        => 'LikertScale',
+				'scalePoints' => 2,
+				'itemLabels'  => array( 'Star', 'Unstar' ),
+				'itemValues'  => array( 'true', 'false' ),
+			),
+		);
+
+		$this->expected_vote_rating = array(
+			'id'         => 'http://example.org?p=' . $this->post->ID . '&uid=' . $this->user->ID . '#pulse_press_vote',
+			'type'       => 'Rating',
+			'rater'      => $this->expected_actor,
+			'rated'      => $this->expected_post,
+			'question'   => $this->expected_vote_question,
+			'selections' => array(),
+		);
+
+		$this->expected_star_rating = array(
+			'id'         => 'http://example.org?p=' . $this->post->ID . '&uid=' . $this->user->ID . '#pulse_press_star',
+			'type'       => 'Rating',
+			'rater'      => $this->expected_actor,
+			'rated'      => $this->expected_post,
+			'question'   => $this->expected_star_question,
+			'selections' => array(),
+		);
+
+		CaliperSensor::set_send_events( false );
 	}
 
+	/**
+	 * Tear down tests
+	 */
 	function tearDown() {
 		parent::tearDown();
 	}
 
+	/**
+	 * Helper function
+	 */
 	function wp_date_to_iso8601( $string ) {
 		$timestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $string );
 		$timestamp->setTimezone( new \DateTimeZone( 'UTC' ) );
 		return substr( $timestamp->format( 'Y-m-d\TH:i:s.u' ), 0, -3 ) . 'Z'; // truncate μs to ms.
 	}
 
+	/**
+	 * Validate and remove common fields
+	 */
 	function cleanup_event_json( $event_json ) {
 
 		$envelope = json_decode( $event_json, true );
 
 		$this->assertSame( $envelope['sensor'], $this->home_url );
 		$this->assertNotNull( $envelope['sendTime'] );
-		$this->assertSame( $envelope['dataVersion'], "http://purl.imsglobal.org/ctx/caliper/v1p1" );
+		$this->assertSame( $envelope['dataVersion'], 'http://purl.imsglobal.org/ctx/caliper/v1p2' );
 		$this->assertCount( 1, $envelope['data'] );
 
 		$event = $envelope['data'][0];
-		if ( 'ResourceManagementEvent' === $event['type'] ) {
-			$this->assertSame( $event['@context'], "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension" );
-		} else {
-			$this->assertSame( $event['@context'], "http://purl.imsglobal.org/ctx/caliper/v1p1" );
-		}
+		$this->assertSame( $event['@context'], 'http://purl.imsglobal.org/ctx/caliper/v1p2' );
 		unset( $event['@context'] );
 
 		$this->assertNotNull( $event['id'] );
@@ -143,11 +193,18 @@ class HookTest extends WP_UnitTestCase {
 		$this->assertNotNull( $event['session']['id'] );
 		unset( $event['session']['id'] );
 
+		$this->assertNotNull( $event['session']['client']['id'] );
+		unset( $event['session']['client']['id'] );
+
 		$this->assertSame(
 			$event['session'],
 			array(
-				'type' => 'Session',
-				'user' => $this->expected_actor,
+				'type'   => 'Session',
+				'client' => array(
+					'type'      => 'SoftwareApplication',
+					'ipAddress' => '127.0.0.1',
+				),
+				'user'   => $this->expected_actor,
 			)
 		);
 		unset( $event['session'] );
@@ -155,6 +212,9 @@ class HookTest extends WP_UnitTestCase {
 		return $event;
 	}
 
+	/**
+	 * Enable Caliper for tests
+	 */
 	function _enable_caliper() {
 		add_site_option(
 			'wp_caliper_network_settings',
@@ -191,6 +251,7 @@ class HookTest extends WP_UnitTestCase {
 
 		$expected_event = array(
 			'type'       => 'Event',
+			'profile'    => 'GeneralProfile',
 			'action'     => 'Completed',
 			'object'     => array(
 				'id'           => 'http://example.org?p=' . $this->badge_award->ID,
@@ -218,21 +279,18 @@ class HookTest extends WP_UnitTestCase {
 				'isPartOf'     => $this->expected_site,
 			),
 			'extensions' => array(
-				'badgeEarned'  => true,
 
 				/*
-				 * hard test test badgeAssertion so do a basic test below
+				 * hard to test badgeAssertion so do a basic test below
 				 * 'badgeAssertion' => 'http://example.org/api/badge/assertion/?uid=5-1544833466-2',
 				 */
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
+				'badgeEarned' => true,
 			),
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_badgeos_award_achievement( $this->user->ID, $this->badge_award->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -241,7 +299,7 @@ class HookTest extends WP_UnitTestCase {
 		$this->assertSame( $expected_event, $actual_event );
 
 		WPCaliperPlugin\wp_caliper_badgeos_award_achievement( $this->user->ID, $this->badge_step->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 0, $envelopes );
 	}
@@ -253,6 +311,7 @@ class HookTest extends WP_UnitTestCase {
 	function test_wp_caliper_shutdown() {
 		$expected_event = array(
 			'type'       => 'NavigationEvent',
+			'profile'    => 'ReadingProfile',
 			'action'     => 'NavigatedTo',
 			'object'     => array(
 				'id'   => 'http://example.org/?p=' . $this->post->ID,
@@ -262,15 +321,12 @@ class HookTest extends WP_UnitTestCase {
 				'queryString'  => 'p=' . $this->post->ID,
 				'absolutePath' => 'http://example.org/',
 				'absoluteUrl'  => 'http://example.org/?p=' . $this->post->ID,
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
 			),
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_shutdown();
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -283,19 +339,15 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_comment_post() {
 		$expected_event = array(
-			'type'       => 'ResourceManagementEvent',
-			'action'     => 'Created',
-			'object'     => $this->expected_comment,
-			'extensions' => array(
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'ResourceManagementEvent',
+			'profile' => 'ResourceManagementProfile',
+			'action'  => 'Created',
+			'object'  => $this->expected_comment,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_comment_post( $this->comment->comment_ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -309,19 +361,15 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_edit_comment() {
 		$expected_event = array(
-			'type'       => 'ResourceManagementEvent',
-			'action'     => 'Modified',
-			'object'     => $this->expected_comment,
-			'extensions' => array(
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'ResourceManagementEvent',
+			'profile' => 'ResourceManagementProfile',
+			'action'  => 'Modified',
+			'object'  => $this->expected_comment,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_edit_comment( $this->comment->comment_ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -333,19 +381,15 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_transition_comment_status() {
 		$expected_event = array(
-			'type'       => 'ResourceManagementEvent',
-			'action'     => 'Published',
-			'object'     => $this->expected_comment,
-			'extensions' => array(
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'ResourceManagementEvent',
+			'profile' => 'ResourceManagementProfile',
+			'action'  => 'Published',
+			'object'  => $this->expected_comment,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_transition_comment_status( 'approved', 'some-other-status', $this->comment );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -353,7 +397,7 @@ class HookTest extends WP_UnitTestCase {
 
 		$expected_event['action'] = 'Unpublished';
 		WPCaliperPlugin\wp_caliper_transition_comment_status( 'some-other-status', 'approved', $this->comment );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -361,14 +405,14 @@ class HookTest extends WP_UnitTestCase {
 
 		$expected_event['action'] = 'Deleted';
 		WPCaliperPlugin\wp_caliper_transition_comment_status( 'trash', 'approved', $this->comment );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
 		$this->assertSame( $expected_event, $actual_event );
 
 		WPCaliperPlugin\wp_caliper_transition_comment_status( 'some-status', 'some-other-status', $this->comment );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 0, $envelopes );
 	}
@@ -377,22 +421,19 @@ class HookTest extends WP_UnitTestCase {
 	 * Test pulse_press_vote_up hook
 	 */
 	function test_wp_caliper_pulse_press_vote_up() {
+		$this->expected_vote_rating['selections'] = array( '1' );
+
 		$expected_event = array(
-			'type'       => 'Event',
-			'action'     => 'Ranked',
-			'object'     => $this->expected_post,
-			'extensions' => array(
-				'upVote'       => true,
-				'vote'         => 1,
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'      => 'FeedbackEvent',
+			'profile'   => 'FeedbackProfile',
+			'action'    => 'Ranked',
+			'object'    => $this->expected_post,
+			'generated' => $this->expected_vote_rating,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_pulse_press_vote_up( $this->post->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -403,22 +444,19 @@ class HookTest extends WP_UnitTestCase {
 	 * Test pulse_press_vote_down hook
 	 */
 	function test_wp_caliper_pulse_press_vote_down() {
+		$this->expected_vote_rating['selections'] = array( '-1' );
+
 		$expected_event = array(
-			'type'       => 'Event',
-			'action'     => 'Ranked',
-			'object'     => $this->expected_post,
-			'extensions' => array(
-				'downVote'     => true,
-				'vote'         => -1,
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'      => 'FeedbackEvent',
+			'profile'   => 'FeedbackProfile',
+			'action'    => 'Ranked',
+			'object'    => $this->expected_post,
+			'generated' => $this->expected_vote_rating,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_pulse_press_vote_down( $this->post->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -429,22 +467,19 @@ class HookTest extends WP_UnitTestCase {
 	 * Test pulse_press_vote_delete hook
 	 */
 	function test_wp_caliper_pulse_press_vote_delete() {
+		$this->expected_vote_rating['selections'] = array( '0' );
+
 		$expected_event = array(
-			'type'       => 'Event',
-			'action'     => 'Ranked',
-			'object'     => $this->expected_post,
-			'extensions' => array(
-				'resetVote'    => true,
-				'vote'         => 0,
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'      => 'FeedbackEvent',
+			'profile'   => 'FeedbackProfile',
+			'action'    => 'Ranked',
+			'object'    => $this->expected_post,
+			'generated' => $this->expected_vote_rating,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_pulse_press_vote_delete( $this->post->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -455,21 +490,19 @@ class HookTest extends WP_UnitTestCase {
 	 * Test pulse_press_star_add hook
 	 */
 	function test_wp_caliper_pulse_press_star_add() {
+		$this->expected_star_rating['selections'] = array( 'true' );
+
 		$expected_event = array(
-			'type'       => 'Event',
-			'action'     => 'Ranked',
-			'object'     => $this->expected_post,
-			'extensions' => array(
-				'favorited'    => true,
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'      => 'FeedbackEvent',
+			'profile'   => 'FeedbackProfile',
+			'action'    => 'Ranked',
+			'object'    => $this->expected_post,
+			'generated' => $this->expected_star_rating,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_pulse_press_star_add( $this->post->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -480,21 +513,19 @@ class HookTest extends WP_UnitTestCase {
 	 * Test pulse_press_star_delete hook
 	 */
 	function test_wp_caliper_pulse_press_star_delete() {
+		$this->expected_star_rating['selections'] = array( 'false' );
+
 		$expected_event = array(
-			'type'       => 'Event',
-			'action'     => 'Ranked',
-			'object'     => $this->expected_post,
-			'extensions' => array(
-				'unfavorited'  => true,
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'      => 'FeedbackEvent',
+			'profile'   => 'FeedbackProfile',
+			'action'    => 'Ranked',
+			'object'    => $this->expected_post,
+			'generated' => $this->expected_star_rating,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_pulse_press_star_delete( $this->post->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -506,19 +537,15 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_save_post() {
 		$expected_event = array(
-			'type'       => 'ResourceManagementEvent',
-			'action'     => 'Created',
-			'object'     => $this->expected_post,
-			'extensions' => array(
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'ResourceManagementEvent',
+			'profile' => 'ResourceManagementProfile',
+			'action'  => 'Created',
+			'object'  => $this->expected_post,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_save_post( $this->post->ID, $this->post, false );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -526,7 +553,7 @@ class HookTest extends WP_UnitTestCase {
 
 		$expected_event['action'] = 'Modified';
 		WPCaliperPlugin\wp_caliper_save_post( $this->post->ID, $this->post, true );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -538,7 +565,7 @@ class HookTest extends WP_UnitTestCase {
 			)
 		);
 		WPCaliperPlugin\wp_caliper_save_post( $this->badge_log->ID, $this->badge_log, false );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 0, $envelopes );
 	}
@@ -548,19 +575,15 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_transition_post_status() {
 		$expected_event = array(
-			'type'       => 'ResourceManagementEvent',
-			'action'     => 'Published',
-			'object'     => $this->expected_post,
-			'extensions' => array(
-				'browser-info'  => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'ResourceManagementEvent',
+			'profile' => 'ResourceManagementProfile',
+			'action'  => 'Published',
+			'object'  => $this->expected_post,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_transition_post_status( 'publish', 'some-other-status', $this->post );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -568,7 +591,7 @@ class HookTest extends WP_UnitTestCase {
 
 		$expected_event['action'] = 'Unpublished';
 		WPCaliperPlugin\wp_caliper_transition_post_status( 'some-other-status', 'publish', $this->post );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -576,14 +599,22 @@ class HookTest extends WP_UnitTestCase {
 
 		$expected_event['action'] = 'Deleted';
 		WPCaliperPlugin\wp_caliper_transition_post_status( 'trash', 'publish', $this->post );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
+
+		$this->assertCount( 1, $envelopes );
+		$actual_event = $this->cleanup_event_json( $envelopes[0] );
+		$this->assertSame( $expected_event, $actual_event );
+
+		$expected_event['action'] = 'Restored';
+		WPCaliperPlugin\wp_caliper_transition_post_status( 'publish', 'trash', $this->post );
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
 		$this->assertSame( $expected_event, $actual_event );
 
 		WPCaliperPlugin\wp_caliper_transition_post_status( 'some-status', 'some-other-status', $this->post );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 0, $envelopes );
 	}
@@ -620,19 +651,15 @@ class HookTest extends WP_UnitTestCase {
 		);
 
 		$expected_event = array(
-			'type'       => 'ResourceManagementEvent',
-			'action'     => 'Created',
-			'object'     => $this->expected_attachment_post,
-			'extensions' => array(
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'ResourceManagementEvent',
+			'profile' => 'ResourceManagementProfile',
+			'action'  => 'Created',
+			'object'  => $this->expected_attachment_post,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_add_attachment( $this->attachment->ID );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -644,19 +671,15 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_wp_login() {
 		$expected_event = array(
-			'type'       => 'SessionEvent',
-			'action'     => 'LoggedIn',
-			'object'     => $this->expected_ed_app,
-			'extensions' => array(
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'SessionEvent',
+			'profile' => 'SessionProfile',
+			'action'  => 'LoggedIn',
+			'object'  => $this->expected_ed_app,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_wp_login( null, $this->user );
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );
@@ -668,19 +691,15 @@ class HookTest extends WP_UnitTestCase {
 	 */
 	function test_wp_caliper_clear_auth_cookie() {
 		$expected_event = array(
-			'type'       => 'SessionEvent',
-			'action'     => 'LoggedOut',
-			'object'     => $this->expected_ed_app,
-			'extensions' => array(
-				'browser-info' => array(
-					'ipAddress' => '127.0.0.1',
-				),
-			),
+			'type'    => 'SessionEvent',
+			'profile' => 'SessionProfile',
+			'action'  => 'LoggedOut',
+			'object'  => $this->expected_ed_app,
 		);
 		$this->_enable_caliper();
 
 		WPCaliperPlugin\wp_caliper_clear_auth_cookie();
-		$envelopes = CaliperSensor::getEnvelopes();
+		$envelopes = CaliperSensor::get_envelopes();
 
 		$this->assertCount( 1, $envelopes );
 		$actual_event = $this->cleanup_event_json( $envelopes[0] );

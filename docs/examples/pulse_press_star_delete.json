@@ -1,73 +1,137 @@
 {
     "sensor": "https://testwordpress.xx",
     "sendTime": "2018-11-08T19:52:26.000Z",
-    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p2",
     "data": [{
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
-    "type": "Event",
-    "actor": {
-        "id": "http://www.ubc.ca/PUID123ROOT",
-        "type": "Person",
-        "name": "root",
-        "dateCreated": "2018-11-08T19:52:26.000Z"
-    },
-    "action": "Ranked",
-    "object": {
-        "id": "http://wordpress/vote-site?p=14",
-        "type": "WebPage",
-        "name": "asd asd asd",
-        "description": "asd asd asd",
-        "extensions": {
-            "post": true,
-            "permalink": "http://wordpress/vote-site/2018/11/20/asd-asd-asd/",
-            "postType": "post",
-            "postStatus": "publish",
-            "commentStatus": "open",
-            "pingStatus": "open",
-            "commentCount": "0",
-            "menuOrder": 0
-        },
-        "dateCreated": "2018-11-20T21:59:05.000Z",
-        "dateModified": "2018-11-20T21:59:05.000Z",
-        "creators": [
-            {
-                "id": "http://www.ubc.ca/PUID123ROOT",
-                "type": "Person",
-                "name": "root",
-                "dateCreated": "2018-11-08T19:52:26.000Z"
-            }
-        ],
-        "isPartOf": {
-            "id": "http://wordpress/vote-site",
-            "type": "DigitalResource",
-            "name": "Voting Site",
-            "description": "Just another Some Website 1 Sites site"
-        }
-    },
-    "eventTime": "2018-11-20T22:01:43.000Z",
-    "edApp": {
-        "id": "http://wordpress/",
-        "type": "SoftwareApplication",
-        "name": "WordPress",
-        "version": "4.9.8"
-    },
-    "session": {
-        "id": "http://wordpress/vote-site/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
-        "type": "Session",
-        "user": {
+        "@context": "http://purl.imsglobal.org/ctx/caliper/v1p2",
+        "type": "Event",
+        "actor": {
             "id": "http://www.ubc.ca/PUID123ROOT",
             "type": "Person",
             "name": "root",
             "dateCreated": "2018-11-08T19:52:26.000Z"
-        }
-    },
-    "id": "urn:uuid:99b55a40-4863-44b7-98ab-25cc2827eca7",
-    "extensions": {
-        "unfavorited": true,
-        "browser-info": {
-            "referer": "http://wordpress/vote-site/",
-            "ipAddress": "172.18.0.1"
-        }
-    }
- }]
+        },
+        "profile": "FeedbackProfile",
+        "action": "Ranked",
+        "object": {
+            "id": "http://wordpress/vote-site?p=14",
+            "type": "WebPage",
+            "name": "asd asd asd",
+            "description": "asd asd asd",
+            "extensions": {
+                "post": true,
+                "permalink": "http://wordpress/vote-site/2018/11/20/asd-asd-asd/",
+                "postType": "post",
+                "postStatus": "publish",
+                "commentStatus": "open",
+                "pingStatus": "open",
+                "commentCount": "0",
+                "menuOrder": 0
+            },
+            "dateCreated": "2018-11-20T21:59:05.000Z",
+            "dateModified": "2018-11-20T21:59:05.000Z",
+            "creators": [
+                {
+                    "id": "http://www.ubc.ca/PUID123ROOT",
+                    "type": "Person",
+                    "name": "root",
+                    "dateCreated": "2018-11-08T19:52:26.000Z"
+                }
+            ],
+            "isPartOf": {
+                "id": "http://wordpress/vote-site",
+                "type": "DigitalResource",
+                "name": "Voting Site",
+                "description": "Just another Some Website 1 Sites site"
+            }
+        },
+        "generated": {
+            "id": "http://wordpress/vote-site?p=14&uid=1#vote",
+            "type": "Rating",
+            "rater": {
+                "id": "http://www.ubc.ca/PUID123ROOT",
+                "type": "Person",
+                "name": "root",
+                "dateCreated": "2018-11-08T19:52:26.000Z"
+            },
+            "rated": {
+                "id": "http://wordpress/vote-site?p=14",
+                "type": "WebPage",
+                "name": "asd asd asd",
+                "description": "asd asd asd",
+                "extensions": {
+                    "post": true,
+                    "permalink": "http://wordpress/vote-site/2018/11/20/asd-asd-asd/",
+                    "postType": "post",
+                    "postStatus": "publish",
+                    "commentStatus": "open",
+                    "pingStatus": "open",
+                    "commentCount": "0",
+                    "menuOrder": 0
+                },
+                "dateCreated": "2018-11-20T21:59:05.000Z",
+                "dateModified": "2018-11-20T21:59:05.000Z",
+                "creators": [
+                    {
+                        "id": "http://www.ubc.ca/PUID123ROOT",
+                        "type": "Person",
+                        "name": "root",
+                        "dateCreated": "2018-11-08T19:52:26.000Z"
+                    }
+                ],
+                "isPartOf": {
+                    "id": "http://wordpress/vote-site",
+                    "type": "DigitalResource",
+                    "name": "Voting Site",
+                    "description": "Just another Some Website 1 Sites site"
+                }
+            },
+            "question": {
+                "id": "http://localhost/vote-site#pulse_press_star_question",
+                "type": "RatingScaleQuestion",
+                "scale": {
+                    "id": "http://localhost/vote-site#pulse_press_star_scale",
+                    "type": "LikertScale",
+                    "scalePoints": 2,
+                    "itemLabels": [
+                        "Star",
+                        "Unstar"
+                    ],
+                    "itemValues": [
+                        "true",
+                        "false"
+                    ]
+                }
+            },
+            "selections": [
+                "false"
+            ]
+        },
+        "eventTime": "2018-11-20T22:01:43.000Z",
+        "edApp": {
+            "id": "http://wordpress/",
+            "type": "SoftwareApplication",
+            "name": "WordPress",
+            "version": "4.9.8"
+        },
+        "session": {
+            "id": "http://wordpress/vote-site/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N",
+            "type": "Session",
+            "client": {
+                "id": "http://wordpress/session/ApbImJzKkM3IZOaSGOMt5saF8Y2kNpWR6tSpeYkFx9N#client",
+                "type": "SoftwareApplication",
+                "ipAddress": "172.18.0.1"
+            },
+            "user": {
+                "id": "http://www.ubc.ca/PUID123ROOT",
+                "type": "Person",
+                "name": "root",
+                "dateCreated": "2018-11-08T19:52:26.000Z"
+            },
+            "extensions": {
+                "referer": "http://wordpress/vote-site/"
+            }
+        },
+        "id": "urn:uuid:99b55a40-4863-44b7-98ab-25cc2827eca7"
+    }]
 }

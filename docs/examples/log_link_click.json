@@ -1,49 +1,54 @@
 {
     "sensor": "https://testwordpress.xx",
     "sendTime": "2018-11-08T19:52:26.000Z",
-    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p2",
     "data": [{
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
-    "type": "NavigationEvent",
-    "actor": {
-        "id": "http://www.ubc.ca/PUID123ROOT",
-        "type": "Person",
-        "name": "root",
-        "dateCreated": "2018-11-08T19:52:26.000Z"
-    },
-    "action": "NavigatedTo",
-    "object": {
-        "id": "https://wordpress.org/",
-        "type": "WebPage"
-    },
-    "eventTime": "2018-11-20T23:37:01.000Z",
-    "edApp": {
-        "id": "http://wordpress/",
-        "type": "SoftwareApplication",
-        "name": "WordPress",
-        "version": "4.9.8"
-    },
-    "session": {
-        "id": "http://wordpress/badge-test/session/l9fFIjPr8Yi3VmnjM7XYkaYgpPyPjrfqat4PntWcp86",
-        "type": "Session",
-        "user": {
+        "@context": "http://purl.imsglobal.org/ctx/caliper/v1p2",
+        "type": "NavigationEvent",
+        "actor": {
             "id": "http://www.ubc.ca/PUID123ROOT",
             "type": "Person",
             "name": "root",
             "dateCreated": "2018-11-08T19:52:26.000Z"
+        },
+        "profile": "ReadingProfile",
+        "action": "NavigatedTo",
+        "object": {
+            "id": "https://wordpress.org/",
+            "type": "WebPage"
+        },
+        "eventTime": "2018-11-20T23:37:01.000Z",
+        "edApp": {
+            "id": "http://wordpress/",
+            "type": "SoftwareApplication",
+            "name": "WordPress",
+            "version": "4.9.8"
+        },
+        "session": {
+            "id": "http://wordpress/badge-test/session/l9fFIjPr8Yi3VmnjM7XYkaYgpPyPjrfqat4PntWcp86",
+            "type": "Session",
+            "client": {
+                "id": "http://wordpress/session/l9fFIjPr8Yi3VmnjM7XYkaYgpPyPjrfqat4PntWcp86#client",
+                "type": "SoftwareApplication",
+                "ipAddress": "172.19.0.1"
+            },
+            "user": {
+                "id": "http://www.ubc.ca/PUID123ROOT",
+                "type": "Person",
+                "name": "root",
+                "dateCreated": "2018-11-08T19:52:26.000Z"
+            },
+            "extensions": {
+                "referer": "http://wordpress/badge-test/badges/nominate/"
+            }
+        },
+        "id": "urn:uuid:1daaa84b-7980-4437-817b-7f8afef1f7e5",
+        "extensions": {
+            "linkClick": true,
+            "requesterSiteUrl": "http://wordpress/badge-test",
+            "queryString": "",
+            "absolutePath": "https://wordpress.org/",
+            "absoluteUrl": "https://wordpress.org/"
         }
-    },
-    "id": "urn:uuid:1daaa84b-7980-4437-817b-7f8afef1f7e5",
-    "extensions": {
-        "linkClick": true,
-        "requesterSiteUrl": "http://wordpress/badge-test",
-        "queryString": "",
-        "absolutePath": "https://wordpress.org/",
-        "absoluteUrl": "https://wordpress.org/",
-        "browser-info": {
-            "referer": "http://wordpress/badge-test/badges/nominate/",
-            "ipAddress": "172.19.0.1"
-        }
-    }
- }]
+    }]
 }

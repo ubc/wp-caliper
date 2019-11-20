@@ -75,7 +75,7 @@ class WP_Caliper {
 			new WP_Caliper_Admin();
 		}
 
-		if ( CaliperSensor::caliperEnabled() ) {
+		if ( CaliperSensor::caliper_enabled() ) {
 			require_once( plugin_dir_path( __FILE__ ).'wp-caliper-event-hooks.php' );
 		}
 
@@ -173,12 +173,12 @@ class WP_Caliper {
 		if ( ! empty( self::$local_options ) &&
 			! empty( self::$local_options['wp_caliper_host'] ) &&
 			! empty( self::$local_options['wp_caliper_api_key'] ) ) {
-			CaliperSensor::setOptions( self::$local_options['wp_caliper_host'], self::$local_options['wp_caliper_api_key'] );
+			CaliperSensor::set_options( self::$local_options['wp_caliper_host'], self::$local_options['wp_caliper_api_key'] );
 		} elseif ( self::$network_enabled &&
 				! empty( self::$network_options ) &&
 				! empty( self::$network_options['wp_caliper_host'] ) &&
 				! empty( self::$network_options['wp_caliper_api_key'] ) ) {
-			CaliperSensor::setOptions( self::$network_options['wp_caliper_host'], self::$network_options['wp_caliper_api_key'] );
+			CaliperSensor::set_options( self::$network_options['wp_caliper_host'], self::$network_options['wp_caliper_api_key'] );
 		}
 	}
 
@@ -278,7 +278,7 @@ class WP_Caliper {
 				self::setup_caliper_sensor( $queue_job->blog_id );
 
 				// try remitting the event!
-				$success = CaliperSensor::_sendEvent( $queue_job->event );
+				$success = CaliperSensor::_send_event( $queue_job->event );
 				if ( ! $success ) {
 					$queue_job->tried_sending_again();
 					$queue_job->save_new_row();

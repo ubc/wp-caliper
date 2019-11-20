@@ -1,17 +1,16 @@
 <?php
 namespace WPCaliperPlugin\caliper;
 
-use WPCaliperPlugin\caliper\CaliperSensor;
-use WPCaliperPlugin\caliper\ResourceIRI;
 use IMSGlobal\Caliper\entities\agent\Person;
-use IMSGlobal\Caliper\entities\EntityType;
 
+/**
+ * Handles Caliper Actors
+ */
 class CaliperActor {
-	private static function _generateAnonymousActor() {
-		return ( new Person( 'http://purl.imsglobal.org/ctx/caliper/v1p1/Person' ) );
-	}
-
-	private static function _generateActor( \WP_User &$user ) {
+	/**
+	 * Generates a WordPress actor with overridable homepage and id
+	 */
+	private static function _generate_actor( \WP_User &$user ) {
 		// load user data to get external unique identifier.
 		$user_data = get_userdata( $user->ID );
 		$unique_id = get_user_meta( $user_data->ID, WP_CALIPER_DEFAULT_ACTOR_IDENTIFIER, true );
@@ -37,12 +36,15 @@ class CaliperActor {
 			->setDateCreated( \DateTime::createFromFormat( 'Y-m-d H:i:s', $user_data->user_registered ) );
 	}
 
-	public static function generateActor( \WP_User &$user ) {
+	/**
+	 * Generates a Caliper actor
+	 */
+	public static function generate_actor( \WP_User &$user ) {
 		// happens when not logged in.
 		if ( ! $user->ID ) {
-			return self::_generateAnonymousActor();
+			return Person::makeAnonymous();
 		}
-		$actor = self::_generateActor( $user );
+		$actor = self::_generate_actor( $user );
 		return apply_filters( 'wp_caliper_actor', $actor, $user );
 	}
 }

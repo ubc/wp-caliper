@@ -28,11 +28,17 @@ function _manually_load_plugin() {
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 
+/**
+ * Sets the actor id override
+ */
 function generate_unique( $string, $user_id, $user_data ) {
 	return $user_id;
 }
 tests_add_filter( 'wp_caliper_actor_identifier', 'generate_unique', 10, 3 );
 
+/**
+ * Sets the actor homepage override
+ */
 function actor_homepage( $string ) {
 	return 'http://test.homepage.com';
 }

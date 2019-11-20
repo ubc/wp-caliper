@@ -1,46 +1,49 @@
 {
     "sensor": "https://testwordpress.xx",
     "sendTime": "2018-11-08T19:52:26.000Z",
-    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "dataVersion": "http://purl.imsglobal.org/ctx/caliper/v1p2",
     "data": [{
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
-    "type": "SessionEvent",
-    "actor": {
-        "id": "http://www.ubc.ca/PUID123ROOT",
-        "type": "Person",
-        "name": "root",
-        "dateCreated": "2018-11-08T19:52:26.000Z"
-    },
-    "action": "LoggedIn",
-    "object": {
-        "id": "http://wordpress/",
-        "type": "SoftwareApplication",
-        "name": "WordPress",
-        "version": "4.9.8"
-    },
-    "eventTime": "2018-11-21T17:33:22.000Z",
-    "edApp": {
-        "id": "http://wordpress/",
-        "type": "SoftwareApplication",
-        "name": "WordPress",
-        "version": "4.9.8"
-    },
-    "session": {
-        "id": "http://wordpress/comp101/session/",
-        "type": "Session",
-        "user": {
+        "@context": "http://purl.imsglobal.org/ctx/caliper/v1p2",
+        "type": "SessionEvent",
+        "actor": {
             "id": "http://www.ubc.ca/PUID123ROOT",
             "type": "Person",
             "name": "root",
             "dateCreated": "2018-11-08T19:52:26.000Z"
-        }
-    },
-    "id": "urn:uuid:ddd538e4-679d-4438-9a39-ff4127ebda52",
-    "extensions": {
-        "browser-info": {
-            "referer": "http://wordpress/comp101/wp-login.php?loggedout=true",
-            "ipAddress": "172.18.0.1"
-        }
-    }
- }]
+        },
+        "profile": "SessionProfile",
+        "action": "LoggedIn",
+        "object": {
+            "id": "http://wordpress/",
+            "type": "SoftwareApplication",
+            "name": "WordPress",
+            "version": "4.9.8"
+        },
+        "eventTime": "2018-11-21T17:33:22.000Z",
+        "edApp": {
+            "id": "http://wordpress/",
+            "type": "SoftwareApplication",
+            "name": "WordPress",
+            "version": "4.9.8"
+        },
+        "session": {
+            "id": "http://wordpress/comp101/session/",
+            "type": "Session",
+            "client": {
+                "id": "http://wordpress/session/#client",
+                "type": "SoftwareApplication",
+                "ipAddress": "172.18.0.1"
+            },
+            "user": {
+                "id": "http://www.ubc.ca/PUID123ROOT",
+                "type": "Person",
+                "name": "root",
+                "dateCreated": "2018-11-08T19:52:26.000Z"
+            },
+            "extensions": {
+                "referer": "http://wordpress/comp101/wp-login.php?loggedout=true"
+            }
+        },
+        "id": "urn:uuid:ddd538e4-679d-4438-9a39-ff4127ebda52"
+    }]
 }
