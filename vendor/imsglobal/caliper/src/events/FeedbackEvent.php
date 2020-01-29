@@ -1,7 +1,6 @@
 <?php
 
 namespace IMSGlobal\Caliper\events;
-use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
 use IMSGlobal\Caliper\entities\feedback\Rating;
 use IMSGlobal\Caliper\entities\feedback\Comment;
 use IMSGlobal\Caliper\entities\Generatable;

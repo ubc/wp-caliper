@@ -2,7 +2,6 @@
 
 namespace IMSGlobal\Caliper\events;
 
-use IMSGlobal\Caliper\profiles;
 use IMSGlobal\Caliper\actions;
 use IMSGlobal\Caliper\entities\assignable\Attempt;
 use IMSGlobal\Caliper\entities\Generatable;

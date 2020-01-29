@@ -4,7 +4,6 @@ namespace IMSGlobal\Caliper\events;
 
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
 use IMSGlobal\Caliper\entities\measure\AggregateMeasureCollection;
-use IMSGlobal\Caliper\entities\Targetable;
 use IMSGlobal\Caliper\entities\Generatable;
 
 class ToolUseEvent extends Event {
@@ -48,7 +47,7 @@ class ToolUseEvent extends Event {
      * @param SoftwareApplication $target
      * @return $this|ToolUseEvent
      */
-    public function setTarget(Targetable $target) {
+    public function setTarget($target) {
         if (is_null($target) || ($target instanceof SoftwareApplication)) {
             $this->target = $target;
             return $this;

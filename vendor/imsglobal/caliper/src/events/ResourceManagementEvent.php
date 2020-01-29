@@ -1,8 +1,6 @@
 <?php
 
 namespace IMSGlobal\Caliper\events;
-use IMSGlobal\Caliper\entities\Entity;
-use IMSGlobal\Caliper\entities\Generatable;
 
 
 class ResourceManagementEvent extends Event {

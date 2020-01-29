@@ -14,8 +14,6 @@ class NavigationEvent extends Event {
     private $object;
     /** @var entities\DigitalResource */
     private $target;
-    /** @var profiles\Profile */
-    private $profile;
 
     public function __construct($id = null) {
         parent::__construct($id);
@@ -36,7 +34,7 @@ class NavigationEvent extends Event {
     public function setObject($object) {
         if (is_null($object) || ($object instanceof DigitalResource)) {
             $this->object = $object;
-            if ($this->profile == profiles\Profile::SURVEY) {
+            if ($this->profile === profiles\Profile::SURVEY) {
                 if (!$object instanceof Questionnaire && !$object instanceof QuestionnaireItem) {
                     throw new \InvalidArgumentException(__METHOD__ . ': Questionnaire or QuestionnaireItem expected');
                 }
@@ -47,20 +45,21 @@ class NavigationEvent extends Event {
         throw new \InvalidArgumentException(__METHOD__ . ': DigitalResource expected');
     }
 
-    /** @return entities\DigitalResource target */
+    /** @return entities\DigitalResource|null target */
     public function getTarget() {
         return $this->target;
     }
 
     /**
-     * @param entities\DigitalResource $target
+     * @param entities\DigitalResource|null $target
      * @return $this|Event
      */
-    public function setTarget(entities\Targetable $target) {
-        if (!$target instanceof DigitalResource ) {
-            throw new \InvalidArgumentException(__METHOD__ . ': DigitalResource expected');
+    public function setTarget($target) {
+        if (is_null($target) || ($target instanceof DigitalResource)) {
+            $this->target = $target;
+            return $this;
         }
-        $this->target = $target;
-        return $this;
+
+        throw new \InvalidArgumentException(__METHOD__ . ': DigitalResource expected');
     }
 }

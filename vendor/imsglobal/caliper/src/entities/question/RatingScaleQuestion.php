@@ -2,7 +2,6 @@
 
 namespace IMSGlobal\Caliper\entities\question;
 
-use IMSGlobal\Caliper\entities\DigitalResource;
 use IMSGlobal\Caliper\entities\scale\Scale;
 use IMSGlobal\Caliper\entities;
 

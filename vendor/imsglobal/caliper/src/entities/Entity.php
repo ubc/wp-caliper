@@ -146,18 +146,20 @@ class Entity extends ClassUtil implements \JsonSerializable, entities\schemadoto
     }
 
     /**
-     * @param SystemIdentifier[] $otherIdentifiers
+     * @param SystemIdentifier[]|null $otherIdentifiers
      * @throws \InvalidArgumentException array of SystemIdentifier required
      * @return $this|Entity
      */
     public function setOtherIdentifiers($otherIdentifiers) {
-        if (!is_array($otherIdentifiers)) {
-            $otherIdentifiers = [$otherIdentifiers];
-        }
+        if (!is_null($otherIdentifiers)) {
+            if (!is_array($otherIdentifiers)) {
+                $otherIdentifiers = [$otherIdentifiers];
+            }
 
-        foreach ($otherIdentifiers as $aOtherIdentifier) {
-            if (!($aOtherIdentifier instanceof SystemIdentifier)) {
-                throw new \InvalidArgumentException( __METHOD__ . ': array of SystemIdentifier expected');
+            foreach ($otherIdentifiers as $aOtherIdentifier) {
+                if (!($aOtherIdentifier instanceof SystemIdentifier)) {
+                    throw new \InvalidArgumentException( __METHOD__ . ': array of SystemIdentifier expected');
+                }
             }
         }
 

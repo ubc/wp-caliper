@@ -2,7 +2,6 @@
 
 namespace IMSGlobal\Caliper\events;
 
-use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
 use IMSGlobal\Caliper\entities\session\Session;

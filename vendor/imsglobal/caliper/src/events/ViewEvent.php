@@ -12,8 +12,6 @@ class ViewEvent extends Event {
 
     /** @var DigitalResource */
     private $object;
-    /** @var profiles\Profile */
-    private $profile;
 
     public function __construct($id = null) {
         parent::__construct($id);
@@ -34,7 +32,7 @@ class ViewEvent extends Event {
     public function setObject($object) {
         if (is_null($object) || ($object instanceof DigitalResource)) {
             $this->object = $object;
-            if ($this->profile == profiles\Profile::SURVEY) {
+            if ($this->profile === profiles\Profile::SURVEY) {
                 if (!$object instanceof Questionnaire && !$object instanceof QuestionnaireItem) {
                     throw new \InvalidArgumentException(__METHOD__ . ': Questionnaire or QuestionnaireItem expected');
                 }

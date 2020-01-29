@@ -18,6 +18,5 @@ class Profile extends \IMSGlobal\Caliper\util\BasicEnum {
         SESSION = 'SessionProfile',
         SURVEY = 'SurveyProfile',
         TOOL_LAUNCH = 'ToolLaunchProfile',
-        TOOL_USE = 'ToolUseProfile',
-        VIEWED = 'Viewed';
+        TOOL_USE = 'ToolUseProfile';
 }
