@@ -1,4 +1,10 @@
 <?php
+/**
+ * Caliper Resource IRIs
+ *
+ * @package wp-caliper
+ */
+
 namespace WPCaliperPlugin\caliper;
 
 /**
@@ -52,6 +58,8 @@ class ResourceIRI {
 
 	/**
 	 * Get user session iri
+	 *
+	 * @param string $session_id session id.
 	 */
 	public static function user_session( $session_id ) {
 		return self::get_home_url() . '/session/' . $session_id;
@@ -59,6 +67,8 @@ class ResourceIRI {
 
 	/**
 	 * Get user client iri
+	 *
+	 * @param string|integer $session_id session id.
 	 */
 	public static function user_client( $session_id ) {
 		return self::user_session( $session_id ) . '#client';
@@ -66,6 +76,8 @@ class ResourceIRI {
 
 	/**
 	 * Get site iri
+	 *
+	 * @param string|integer $blog_id blog id.
 	 */
 	public static function site( $blog_id = null ) {
 		return get_site_url( $blog_id );
@@ -73,6 +85,8 @@ class ResourceIRI {
 
 	/**
 	 * Get post iri
+	 *
+	 * @param string|integer $post_id post id.
 	 */
 	public static function post( $post_id ) {
 		// return get_permalink( $post_id );.
@@ -81,6 +95,9 @@ class ResourceIRI {
 
 	/**
 	 * Get comment iri
+	 *
+	 * @param string|integer $post_id post id.
+	 * @param string|integer $comment_id comment id.
 	 */
 	public static function comment( $post_id, $comment_id ) {
 		return self::post( $post_id ) . '#comment=' . $comment_id;
@@ -88,6 +105,8 @@ class ResourceIRI {
 
 	/**
 	 * Get badge assertion iri
+	 *
+	 * @param string|integer $assertion_uid assertion uid.
 	 */
 	public static function badge_assertion( $assertion_uid ) {
 		return self::get_site_api_url() . '/badge/assertion/?uid=' . $assertion_uid;
@@ -102,6 +121,8 @@ class ResourceIRI {
 
 	/**
 	 * Get badge class iri
+	 *
+	 * @param string|integer $post_id post id.
 	 */
 	public static function badge_class( $post_id ) {
 		return self::get_site_api_url() . '/badge/badge_class/?uid=' . $post_id;
@@ -109,6 +130,8 @@ class ResourceIRI {
 
 	/**
 	 * Get badge image iri
+	 *
+	 * @param string|integer $post_id post id.
 	 */
 	public static function badge_image( $post_id ) {
 		return wp_get_attachment_url( get_post_thumbnail_id( $post_id ) );
@@ -116,6 +139,8 @@ class ResourceIRI {
 
 	/**
 	 * Get web page url/iri
+	 *
+	 * @param string $absolute_url absolute url.
 	 */
 	public static function webpage( $absolute_url ) {
 		return $absolute_url;
@@ -151,6 +176,9 @@ class ResourceIRI {
 
 	/**
 	 * Get pulse press vote rating iri
+	 *
+	 * @param string|integer $post_id post id.
+	 * @param string|integer $user_id user id.
 	 */
 	public static function pulse_press_vote_rating( $post_id, $user_id ) {
 		return self::post( $post_id ) . '&uid=' . $user_id . '#pulse_press_vote';
@@ -158,6 +186,9 @@ class ResourceIRI {
 
 	/**
 	 * Get pulse press star rating iri
+	 *
+	 * @param string|integer $post_id post id.
+	 * @param string|integer $user_id user id.
 	 */
 	public static function pulse_press_star_rating( $post_id, $user_id ) {
 		return self::post( $post_id ) . '&uid=' . $user_id . '#pulse_press_star';

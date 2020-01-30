@@ -1,4 +1,10 @@
 <?php
+/**
+ * Collection of hooks which send Caliper events.
+ *
+ * @package wp-caliper
+ */
+
 namespace WPCaliperPlugin;
 
 use IMSGlobal\Caliper\events\Event;
@@ -29,7 +35,7 @@ function wp_caliper_enqueue_script() {
 		array(
 			'site_url' => site_url(),
 			'url'      => admin_url( 'admin-post.php' ),
-			'security' => wp_create_nonce( 'caliper-click-log-nonce' )
+			'security' => wp_create_nonce( 'caliper-click-log-nonce' ),
 		)
 	);
 }
@@ -53,13 +59,13 @@ function wp_caliper_log_link_click() {
 	$query_string = explode( '?', $click_url_requested );
 	$query_string = count( $query_string ) > 1 ? $query_string[1] : '';
 	$event->setExtensions(
-		[
+		array(
 			'linkClick'        => true,
 			'requesterSiteUrl' => ResourceIRI::site( get_current_blog_id() ),
 			'queryString'      => $query_string,
 			'absolutePath'     => preg_replace( '/\?.*|\#.*/', '', $click_url_requested ),
 			'absoluteUrl'      => $click_url_requested,
-		]
+		)
 	);
 
 	CaliperSensor::send_event( $event, wp_get_current_user() );
@@ -69,6 +75,9 @@ add_action( 'badgeos_award_achievement', 'WPCaliperPlugin\\wp_caliper_badgeos_aw
 /**
  * This is for badge earning events
  * args parameter should return $user_id, $achievement_id, $this_trigger, $site_id, $args
+ *
+ * @param integer $user_id user id.
+ * @param integer $achievement_id achievement id.
  */
 function wp_caliper_badgeos_award_achievement( $user_id, $achievement_id ) {
 	if ( empty( $achievement_id ) ) {
@@ -76,7 +85,7 @@ function wp_caliper_badgeos_award_achievement( $user_id, $achievement_id ) {
 	}
 
 	$current_user = get_userdata( $user_id );
-	$post = get_post( $achievement_id );
+	$post         = get_post( $achievement_id );
 	if ( empty( $current_user ) || empty( $post ) ) {
 		return;
 	}
@@ -94,10 +103,10 @@ function wp_caliper_badgeos_award_achievement( $user_id, $achievement_id ) {
 		->setObject( CaliperEntity::post( $post ) );
 
 	$event->setExtensions(
-		[
+		array(
 			'badgeEarned'    => true,
 			'badgeAssertion' => ResourceIRI::badge_assertion( $assertion_uid ),
-		]
+		)
 	);
 
 	CaliperSensor::send_event( $event, $current_user );
@@ -137,21 +146,23 @@ function wp_caliper_shutdown() {
 	$query_string = explode( '?', $current_url );
 	$query_string = count( $query_string ) > 1 ? $query_string[1] : '';
 	$event->setExtensions(
-		[
+		array(
 			'queryString'  => $query_string,
 			'absolutePath' => preg_replace( '/\?.*|\#.*/', '', $current_url ),
 			'absoluteUrl'  => $current_url,
-		]
+		)
 	);
 
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
 
+add_action( 'comment_post', 'WPCaliperPlugin\\wp_caliper_comment_post', 10, 1 );
 /**
  * This trigger is for tracking new comments
+ *
+ * @param integer $comment_id comment id.
  */
-add_action( 'comment_post', 'WPCaliperPlugin\\wp_caliper_comment_post', 10, 1 );
 function wp_caliper_comment_post( $comment_id ) {
 	if ( empty( $comment_id ) ) {
 		return;
@@ -170,10 +181,12 @@ function wp_caliper_comment_post( $comment_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'edit_comment', 'WPCaliperPlugin\\wp_caliper_edit_comment', 10, 1 );
 /**
  * This trigger is for tracking comment edits
+ *
+ * @param integer $comment_id comment id.
  */
-add_action( 'edit_comment', 'WPCaliperPlugin\\wp_caliper_edit_comment', 10, 1 );
 function wp_caliper_edit_comment( $comment_id ) {
 	if ( empty( $comment_id ) ) {
 		return;
@@ -192,10 +205,14 @@ function wp_caliper_edit_comment( $comment_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'transition_comment_status', 'WPCaliperPlugin\\wp_caliper_transition_comment_status', 10, 3 );
 /**
  * This trigger is to track some specific comment transitions ( going to published, trashed, etc )
+ *
+ * @param integer $new_status new status.
+ * @param integer $old_status old status.
+ * @param object  $comment comment.
  */
-add_action( 'transition_comment_status', 'WPCaliperPlugin\\wp_caliper_transition_comment_status', 10, 3 );
 function wp_caliper_transition_comment_status( $new_status, $old_status, $comment ) {
 	if ( empty( $comment ) || empty( $comment->comment_ID ) ) {
 		return;
@@ -218,10 +235,12 @@ function wp_caliper_transition_comment_status( $new_status, $old_status, $commen
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'pulse_press_vote_up', 'WPCaliperPlugin\\wp_caliper_pulse_press_vote_up', 10, 1 );
 /**
  * PulsePress theme vote up
+ *
+ * @param string|integer $post_id $post id.
  */
-add_action( 'pulse_press_vote_up', 'WPCaliperPlugin\\wp_caliper_pulse_press_vote_up', 10, 1 );
 function wp_caliper_pulse_press_vote_up( $post_id ) {
 	if ( empty( $post_id ) ) {
 		return;
@@ -238,10 +257,12 @@ function wp_caliper_pulse_press_vote_up( $post_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'pulse_press_vote_down', 'WPCaliperPlugin\\wp_caliper_pulse_press_vote_down', 10, 1 );
 /**
  * PulsePress theme vote down
+ *
+ * @param string|integer $post_id $post id.
  */
-add_action( 'pulse_press_vote_down', 'WPCaliperPlugin\\wp_caliper_pulse_press_vote_down', 10, 1 );
 function wp_caliper_pulse_press_vote_down( $post_id ) {
 	if ( empty( $post_id ) ) {
 		return;
@@ -258,10 +279,12 @@ function wp_caliper_pulse_press_vote_down( $post_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'pulse_press_vote_delete', 'WPCaliperPlugin\\wp_caliper_pulse_press_vote_delete', 10, 1 );
 /**
  * PulsePress theme vote delete
+ *
+ * @param string|integer $post_id $post id.
  */
-add_action( 'pulse_press_vote_delete', 'WPCaliperPlugin\\wp_caliper_pulse_press_vote_delete', 10, 1 );
 function wp_caliper_pulse_press_vote_delete( $post_id ) {
 	if ( empty( $post_id ) ) {
 		return;
@@ -278,10 +301,12 @@ function wp_caliper_pulse_press_vote_delete( $post_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'pulse_press_star_add', 'WPCaliperPlugin\\wp_caliper_pulse_press_star_add', 10, 1 );
 /**
  * PulsePress theme star/favorite
+ *
+ * @param string|integer $post_id $post id.
  */
-add_action( 'pulse_press_star_add', 'WPCaliperPlugin\\wp_caliper_pulse_press_star_add', 10, 1 );
 function wp_caliper_pulse_press_star_add( $post_id ) {
 	if ( empty( $post_id ) ) {
 		return;
@@ -298,10 +323,12 @@ function wp_caliper_pulse_press_star_add( $post_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'pulse_press_star_delete', 'WPCaliperPlugin\\wp_caliper_pulse_press_star_delete', 10, 1 );
 /**
  * PulsePress theme star/favorite delete
+ *
+ * @param string|integer $post_id $post id.
  */
-add_action( 'pulse_press_star_delete', 'WPCaliperPlugin\\wp_caliper_pulse_press_star_delete', 10, 1 );
 function wp_caliper_pulse_press_star_delete( $post_id ) {
 	if ( empty( $post_id ) ) {
 		return;
@@ -318,10 +345,14 @@ function wp_caliper_pulse_press_star_delete( $post_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'save_post', 'WPCaliperPlugin\\wp_caliper_save_post', 10, 3 );
 /**
  * This trigger is to track creation edits to posts
+ *
+ * @param string|integer $post_id post id.
+ * @param \WP_POST       $post post.
+ * @param bool           $update update.
  */
-add_action( 'save_post', 'WPCaliperPlugin\\wp_caliper_save_post', 10, 3 );
 function wp_caliper_save_post( $post_id, $post, $update ) {
 	if ( empty( $post_id ) ) {
 		return;
@@ -346,10 +377,14 @@ function wp_caliper_save_post( $post_id, $post, $update ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'transition_post_status', 'WPCaliperPlugin\\wp_caliper_transition_post_status', 10, 3 );
 /**
  * This trigger is to track some specific post transitions ( going to published, trashed, etc )
+ *
+ * @param string   $new_status new status.
+ * @param string   $old_status old status.
+ * @param \WP_POST $post WordPress post object.
  */
-add_action( 'transition_post_status', 'WPCaliperPlugin\\wp_caliper_transition_post_status', 10, 3 );
 function wp_caliper_transition_post_status( $new_status, $old_status, $post ) {
 	if ( empty( $post ) || empty( $post->ID ) ) {
 		return;
@@ -380,10 +415,12 @@ function wp_caliper_transition_post_status( $new_status, $old_status, $post ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'add_attachment', 'WPCaliperPlugin\\wp_caliper_add_attachment', 10, 1 );
 /**
  * This trigger is to track creation edits to posts
+ *
+ * @param string|integer $post_id post id.
  */
-add_action( 'add_attachment', 'WPCaliperPlugin\\wp_caliper_add_attachment', 10, 1 );
 function wp_caliper_add_attachment( $post_id ) {
 	if ( empty( $post_id ) ) {
 		return;
@@ -399,10 +436,13 @@ function wp_caliper_add_attachment( $post_id ) {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
+add_action( 'wp_login', 'WPCaliperPlugin\\wp_caliper_wp_login', 10, 2 );
 /**
  * This trigger is to track log in
+ *
+ * @param bool     $user_login user login.
+ * @param \WP_USER $user WordPress user object.
  */
-add_action( 'wp_login', 'WPCaliperPlugin\\wp_caliper_wp_login', 10, 2 );
 function wp_caliper_wp_login( $user_login, $user ) {
 	if ( empty( $user->ID ) ) {
 		return;
@@ -416,11 +456,10 @@ function wp_caliper_wp_login( $user_login, $user ) {
 	CaliperSensor::send_event( $event, $user );
 }
 
-
+add_action( 'clear_auth_cookie', 'WPCaliperPlugin\\wp_caliper_clear_auth_cookie', 10, 0 );
 /**
  * This trigger is to track log out ( must be done before cookie is cleared or else won't know who the user is )
  */
-add_action( 'clear_auth_cookie', 'WPCaliperPlugin\\wp_caliper_clear_auth_cookie', 10, 0 );
 function wp_caliper_clear_auth_cookie() {
 	$event = ( new SessionEvent() )
 		->setProfile( new Profile( Profile::SESSION ) )

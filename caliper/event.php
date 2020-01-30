@@ -1,7 +1,12 @@
 <?php
+/**
+ * Caliper Event decorator
+ *
+ * @package wp-caliper
+ */
+
 namespace WPCaliperPlugin\caliper;
 
-use WPCaliperPlugin\caliper\ResourceIRI;
 use WPCaliperPlugin\caliper\CaliperActor;
 use WPCaliperPlugin\caliper\CaliperEntity;
 use IMSGlobal\Caliper\events\Event;
@@ -12,6 +17,9 @@ use IMSGlobal\Caliper\events\Event;
 class CaliperEvent {
 	/**
 	 * Adds default info to an event
+	 *
+	 * @param Event    $event Caliper event object.
+	 * @param \WP_User $user WordPress User.
 	 */
 	public static function add_defaults( Event &$event, \WP_User &$user ) {
 		$event->setActor( CaliperActor::generate_actor( $user ) );

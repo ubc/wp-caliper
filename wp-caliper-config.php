@@ -1,4 +1,10 @@
 <?php
+/**
+ * Default config settings
+ *
+ * @package wp-caliper
+ */
+
 define( 'WP_CALIPER_DEFAULT_ACTOR_HOMEPAGE', 'http://www.ubc.ca' );
 define( 'WP_CALIPER_DEFAULT_ACTOR_IDENTIFIER', 'puid' );
 define( 'WP_CALIPER_MINIMUM_PHP_VERSION', '5.6' );

@@ -70,7 +70,7 @@ Nothing yet.
 
 = 1.1.0 =
 * Updated to Caliper v1p2
-* switched to php-caliper dev-develop-v1p2#fa595784e7ed1015cad2341ac6e5e1819e2cd443 for Caliper v1p2 support
+* switched to php-caliper dev-develop#c7e34e230abc7bbb647f8f94245cb649f6191bcd for Caliper v1p2 support
 * Added Restored resource management event to posts
 * Modified PulsePress vote and star events to use the Feedback Profile
 

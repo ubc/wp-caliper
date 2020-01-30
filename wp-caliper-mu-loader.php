@@ -4,6 +4,8 @@
  * Steps:
  * 1. copy the plugin "wp-caliper" folder into the "wp-content/mu-plugins/" folder
  * 2. copy this file into the "wp-content/mu-plugins/" folder
+ *
+ * @package wp-caliper
  */
 
 define( 'WP_CALIPER_MU_MODE', true );

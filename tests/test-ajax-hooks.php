@@ -65,6 +65,8 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 
 	/**
 	 * Helper function
+	 *
+	 * @param string $string string.
 	 */
 	function wp_date_to_iso8601( $string ) {
 		$timestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $string );
@@ -74,6 +76,8 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 
 	/**
 	 * Validate and remove common fields
+	 *
+	 * @param string $event_json event json.
 	 */
 	function cleanup_event_json( $event_json ) {
 
@@ -112,7 +116,7 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 				'type'   => 'Session',
 				'client' => array(
 					'type'      => 'SoftwareApplication',
-					'host'		=> 'example.org',
+					'host'      => 'example.org',
 					'ipAddress' => '127.0.0.1',
 				),
 				'user'   => $this->expected_actor,

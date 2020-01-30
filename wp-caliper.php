@@ -2,13 +2,15 @@
 /**
  * Plugin Name: WP Caliper
  * Plugin URI: https://github.com/ubc/wp-caliper
- * Version: 1.0.3
+ * Version: 1.1.0
  * Description: This plugin generates and emits Caliper events to the specified LRS
  * Tags: Caliper
  * Author: CTLT, Andrew Gardener
  * Author URI: https://github.com/ubc
  * License: GPL-3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * @package wp-caliper
  */
 
 namespace WPCaliperPlugin;
@@ -29,10 +31,33 @@ $plugin_data = get_file_data( __FILE__, array( 'Version' => 'Version' ), false )
 define( 'WP_CALIPER_PLUGIN_VERSION', $plugin_data['Version'] );
 
 
+/**
+ * WP_Caliper plugin main
+ */
 class WP_Caliper {
+	/**
+	 * Stores if network enabled
+	 *
+	 * @var $network_enabled
+	 */
 	private static $network_enabled;
+	/**
+	 * Stores network options
+	 *
+	 * @var $network_options
+	 */
 	private static $network_options;
+	/**
+	 * Stores local options
+	 *
+	 * @var $local_options
+	 */
 	private static $local_options;
+	/**
+	 * Stores list of dependencies
+	 *
+	 * @var $dependencies
+	 */
 	public static $dependencies = array(
 		'BadgeOS'                          => 'http://wordpress.org/plugins/badgeos/',
 		'BadgeOS_Open_Badges_Issuer_AddOn' => 'https://github.com/ubc/open-badges-issuer-addon',
@@ -71,12 +96,12 @@ class WP_Caliper {
 
 		// add admin menus.
 		if ( is_admin() || is_network_admin() ) {
-			require_once( plugin_dir_path( __FILE__ ).'wp-caliper-admin.php' );
+			require_once( plugin_dir_path( __FILE__ ) . 'wp-caliper-admin.php' );
 			new WP_Caliper_Admin();
 		}
 
 		if ( CaliperSensor::caliper_enabled() ) {
-			require_once( plugin_dir_path( __FILE__ ).'wp-caliper-event-hooks.php' );
+			require_once( plugin_dir_path( __FILE__ ) . 'wp-caliper-event-hooks.php' );
 		}
 
 		// needs to check if queue is empty or not and display admin notices as appropriate.
@@ -93,12 +118,12 @@ class WP_Caliper {
 		global $wpdb;
 
 		$current_version = get_site_option( 'wp_caliper_db_installed' );
-		$plugin_version = esc_html( WP_CALIPER_PLUGIN_VERSION );
+		$plugin_version  = esc_html( WP_CALIPER_PLUGIN_VERSION );
 
 		// Version 1.0.0 adds queue table.
 		if ( empty( $current_version ) || version_compare( '1.0.0', $current_version, '>' ) ) {
 
-			//use base_prefix so it will be on global regardless of mu or single site.
+			// use base_prefix so it will be on global regardless of mu or single site.
 			$table_name = WP_Caliper_Queue_Job::get_table_name();
 
 			if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) !== $table_name ) {
@@ -143,6 +168,7 @@ class WP_Caliper {
 	 * Setup the Caliper sensor with rather local site options or network options
 	 * ( tries site options first )
 	 *
+	 * @param string|integer $blog_id blog id.
 	 * @return void
 	 */
 	private static function setup_caliper_sensor( $blog_id = null ) {
@@ -296,8 +322,7 @@ class WP_Caliper {
 	public static function caliper_queue_size() {
 		global $wpdb;
 		$table_name = WP_Caliper_Queue_Job::get_table_name();
-		$sql        = "SELECT COUNT( * ) FROM $table_name";
-		return $wpdb->get_var( $sql );
+		return $wpdb->get_var( "SELECT COUNT( * ) FROM {$table_name}" );
 	}
 
 	/**
@@ -310,7 +335,7 @@ class WP_Caliper {
 			$count = self::caliper_queue_size();
 			if ( $count > 0 ) {
 				$message = sprintf( esc_html__( 'The WP Caliper Queue is not empty. Current number of events: %d', 'wp_caliper' ), $count );
-				echo '<div class="error notice is-dismissible"><p>' . ( $message ) .'</p></div>';
+				echo '<div class="error notice is-dismissible"><p>' . ( $message ) . '</p></div>';
 			}
 		}
 	}

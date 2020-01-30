@@ -1,15 +1,34 @@
 <?php
 /**
  * Section to do settings page for the wp-caliper
+ *
+ * @package wp-caliper
  */
 
 namespace WPCaliperPlugin;
 
+/**
+ * WP_Caliper_Admin Admin settings
+ */
 class WP_Caliper_Admin {
+	/**
+	 * Stores if network is enabled or not
+	 *
+	 * @var $network_enabled
+	 */
 	private static $network_enabled;
+	/**
+	 * Stores admin options
+	 *
+	 * @var $options
+	 */
 	private static $options;
 
-	// fields that are saved. need to be smarter though.
+	/**
+	 * Fields that are saved.
+	 *
+	 * @var $network_fields
+	 */
 	private $network_fields = array(
 		'wp_caliper_disabled'                    => 'No',
 		'wp_caliper_host'                        => '',
@@ -17,7 +36,12 @@ class WP_Caliper_Admin {
 		'wp_caliper_disable_local_site_settings' => 'No',
 		'wp_caliper_host_whitelist'              => '',
 	);
-	private $local_fields   = array(
+	/**
+	 * Fields that are saved.
+	 *
+	 * @var $local_fields
+	 */
+	private $local_fields = array(
 		'wp_caliper_disabled' => 'No',
 		'wp_caliper_host'     => '',
 		'wp_caliper_api_key'  => '',
@@ -388,7 +412,7 @@ class WP_Caliper_Admin {
 	 * - sets value of checkbox to 0 if unselected.  ( Default WP behaviour is to not save the key even in options table. )
 	 * - also checks if URL of local LRS is acceptable based on values set by network level settings
 	 *
-	 * @param array $input
+	 * @param array $input input.
 	 * @return array
 	 */
 	public static function wp_caliper_sanitize_options( $input ) {

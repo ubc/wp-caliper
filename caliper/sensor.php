@@ -1,4 +1,10 @@
 <?php
+/**
+ * Caliper Sensor
+ *
+ * @package wp-caliper
+ */
+
 namespace WPCaliperPlugin\caliper;
 
 use WPCaliperPlugin\WP_Caliper;
@@ -18,23 +24,33 @@ use IMSGlobal\Caliper\request\HttpRequestor;
 class CaliperSensor {
 	/**
 	 * Stores the sensor options (api key/endpoint)
+	 *
+	 * @var $options
 	 */
 	private static $options = null;
 	/**
 	 * Enable/Disable testing events
+	 *
+	 * @var $is_test
 	 */
 	private static $is_test = false;
 	/**
 	 * Enable/Disable sending test events
+	 *
+	 * @var $send_test_events
 	 */
 	private static $send_test_events = false;
 	/**
 	 * Stores the sent Caliper events (for testing)
+	 *
+	 * @var $temp_store
 	 */
 	private static $temp_store = array();
 
 	/**
 	 * Sets $is_test (for testing)
+	 *
+	 * @param bool $is_test set is_test.
 	 */
 	public static function is_test( $is_test ) {
 		self::$is_test = $is_test;
@@ -42,6 +58,8 @@ class CaliperSensor {
 
 	/**
 	 * Sets $is_test (for testing)
+	 *
+	 * @param bool $send_test_events set send_test_events.
 	 */
 	public static function send_test_events( $send_test_events ) {
 		self::$send_test_events = $send_test_events;
@@ -58,6 +76,9 @@ class CaliperSensor {
 
 	/**
 	 * Set the Caliepr sensor api key/host
+	 *
+	 * @param string $host set host.
+	 * @param string $api_key set api_key.
 	 */
 	public static function set_options( $host, $api_key ) {
 		self::$options = ( new Options() )
@@ -78,7 +99,8 @@ class CaliperSensor {
 	private static function get_sensor() {
 		$sensor = new Sensor( ResourceIRI::word_press() );
 		$sensor->registerClient(
-			'default_client', new Client( 'remote_lrs', self::get_options() )
+			'default_client',
+			new Client( 'remote_lrs', self::get_options() )
 		);
 		return $sensor;
 	}
@@ -94,6 +116,9 @@ class CaliperSensor {
 	/**
 	 * Generates the envelop and tries to send the event via _send_event
 	 * If it fails, it will add it the the retry queue
+	 *
+	 * @param Event    $event event to be sent.
+	 * @param \WP_User $user user who generated the event.
 	 */
 	public static function send_event( Event &$event, \WP_User $user ) {
 		if ( ! self::caliper_enabled() ) {
@@ -115,6 +140,9 @@ class CaliperSensor {
 
 	/**
 	 * Sends a Caliper event to endpoint
+	 *
+	 * @param string $event_json json encoded event.
+	 * @throws \InvalidArgumentException Variable $event_json must be a string.
 	 */
 	public static function _send_event( $event_json ) {
 		if ( ! is_string( $event_json ) ) {
@@ -138,10 +166,10 @@ class CaliperSensor {
 		 * based off of https://github.com/IMSGlobal/caliper-php/blob/master/src/request/HttpRequestor.php#L75
 		 */
 		$client  = curl_init( self::get_options()->getHost() );
-		$headers = [
+		$headers = array(
 			'Content-Type: application/json',
 			'Authorization: ' . self::get_options()->getApiKey(),
-		];
+		);
 		curl_setopt_array(
 			$client,
 			array(

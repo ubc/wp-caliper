@@ -1,11 +1,14 @@
 <?php
+/**
+ * Collection Caliper Entities
+ *
+ * @package wp-caliper
+ */
+
 namespace WPCaliperPlugin\caliper;
 
-use WPCaliperPlugin\caliper\CaliperSensor;
 use WPCaliperPlugin\caliper\ResourceIRI;
-use IMSGlobal\Caliper\entities\agent\Person;
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
-use IMSGlobal\Caliper\entities\EntityType;
 use IMSGlobal\Caliper\entities\DigitalResource;
 use IMSGlobal\Caliper\entities\Message;
 use IMSGlobal\Caliper\entities\session\Session;
@@ -35,6 +38,8 @@ class CaliperEntity {
 
 	/**
 	 * Generates a Session entity
+	 *
+	 * @param \WP_User $user WordPress User.
 	 */
 	public static function session( \WP_User &$user ) {
 		$session_id = $user->ID ? wp_get_session_token() : wp_generate_uuid4();
@@ -43,11 +48,11 @@ class CaliperEntity {
 			->setUser( CaliperActor::generate_actor( $user ) )
 			->setClient( CaliperEntity::client( $session_id ) );
 
-		$extensions = [];
+		$extensions = array();
 		if ( array_key_exists( 'HTTP_REFERER', $_SERVER ) ) {
 			$extensions['referer'] = $_SERVER['HTTP_REFERER'];
 		}
-		if ( [] !== $extensions ) {
+		if ( array() !== $extensions ) {
 			$session->setExtensions( $extensions );
 		}
 
@@ -56,6 +61,8 @@ class CaliperEntity {
 
 	/**
 	 * Generates a SoftwareApplication entity
+	 *
+	 * @param string|integer $session_id session id.
 	 */
 	public static function client( $session_id ) {
 		$user_client = ( new SoftwareApplication( ResourceIRI::user_client( $session_id ) ) );
@@ -103,6 +110,8 @@ class CaliperEntity {
 
 	/**
 	 * Generates a Document/WebPage entity
+	 *
+	 * @param \WP_Post $post WordPress post object.
 	 */
 	public static function post( \WP_Post &$post ) {
 		/**
@@ -127,13 +136,13 @@ class CaliperEntity {
 		$post_entity->setIsPartOf( CaliperEntity::site() );
 		$post_entity->setName( get_the_title( $post ) );
 		$post_entity->setDescription( $post->post_content );
-		$post_entity->setDateModified( \DateTime::createFromFormat( "Y-m-d H:i:s", $post->post_modified ) );
-		$post_entity->setDateCreated( \DateTime::createFromFormat( "Y-m-d H:i:s", $post->post_date ) );
+		$post_entity->setDateModified( \DateTime::createFromFormat( 'Y-m-d H:i:s', $post->post_modified ) );
+		$post_entity->setDateCreated( \DateTime::createFromFormat( 'Y-m-d H:i:s', $post->post_date ) );
 
 		// Set author if exists.
 		$author = get_userdata( $post->post_author );
 		if ( $author ) {
-			$post_entity->setCreators( [ CaliperActor::generate_actor( $author ) ] );
+			$post_entity->setCreators( array( CaliperActor::generate_actor( $author ) ) );
 		}
 
 		$extensions = array(
@@ -171,6 +180,8 @@ class CaliperEntity {
 
 	/**
 	 * Generates a Message entity
+	 *
+	 * @param \WP_Comment $comment WordPress comment.
 	 */
 	public static function comment( \WP_Comment &$comment ) {
 		$post = get_post( $comment->comment_post_ID );
@@ -183,7 +194,7 @@ class CaliperEntity {
 		// Set author if exists.
 		$author = get_userdata( $post->user_id );
 		if ( $author ) {
-			$comment_entity->setCreators( [ CaliperActor::generate_actor( $author ) ] );
+			$comment_entity->setCreators( array( CaliperActor::generate_actor( $author ) ) );
 		}
 
 		// Set comment parent if exists.
@@ -217,6 +228,8 @@ class CaliperEntity {
 
 	/**
 	 * Generates a stubbed Message entity
+	 *
+	 * @param \WP_Comment $comment WordPress comment.
 	 */
 	public static function comment_stub( $comment ) {
 		// Setup the post entity.
@@ -226,6 +239,9 @@ class CaliperEntity {
 
 	/**
 	 * Generates a WebPage entity
+	 *
+	 * @param string $absolute_url absolute url.
+	 * @throws \InvalidArgumentException Variable $absolute_url must be a string.
 	 */
 	public static function webpage( $absolute_url ) {
 		if ( ! is_string( $absolute_url ) ) {
@@ -238,6 +254,10 @@ class CaliperEntity {
 
 	/**
 	 * Generates a Rating entity
+	 *
+	 * @param \WP_User $user WordPress User.
+	 * @param \WP_Post $post WordPress post.
+	 * @param string   $vote vote.
 	 */
 	public static function pulse_press_vote_rating( \WP_User $user, \WP_Post &$post, $vote ) {
 		$rating = ( new Rating( ResourceIRI::pulse_press_vote_rating( $post->ID, $user->ID ) ) )
@@ -248,17 +268,21 @@ class CaliperEntity {
 					->setScale(
 						( new LikertScale( ResourceIRI::pulse_press_vote_scale() ) )
 							->setScalePoints( 3 )
-							->setItemLabels( [ 'Vote Up', 'Unvote', 'Vote Down' ] )
-							->setItemValues( [ '1', '0', '-1' ] )
+							->setItemLabels( array( 'Vote Up', 'Unvote', 'Vote Down' ) )
+							->setItemValues( array( '1', '0', '-1' ) )
 					)
 			)
-			->setSelections( [ $vote ] );
+			->setSelections( array( $vote ) );
 
 		return $rating;
 	}
 
 	/**
 	 * Generates a Rating entity
+	 *
+	 * @param \WP_User $user WordPress User.
+	 * @param \WP_Post $post WordPress post.
+	 * @param string   $starred starred.
 	 */
 	public static function pulse_press_star_rating( \WP_User $user, \WP_Post &$post, $starred ) {
 		$rating = ( new Rating( ResourceIRI::pulse_press_star_rating( $post->ID, $user->ID ) ) )
@@ -269,11 +293,11 @@ class CaliperEntity {
 					->setScale(
 						( new LikertScale( ResourceIRI::pulse_press_star_scale() ) )
 							->setScalePoints( 2 )
-							->setItemLabels( [ 'Star', 'Unstar' ] )
-							->setItemValues( [ 'true', 'false' ] )
+							->setItemLabels( array( 'Star', 'Unstar' ) )
+							->setItemValues( array( 'true', 'false' ) )
 					)
 			)
-			->setSelections( [ $starred ] );
+			->setSelections( array( $starred ) );
 
 		return $rating;
 	}

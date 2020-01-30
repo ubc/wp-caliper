@@ -1,4 +1,10 @@
 <?php
+/**
+ * Caliper Actor generator
+ *
+ * @package wp-caliper
+ */
+
 namespace WPCaliperPlugin\caliper;
 
 use IMSGlobal\Caliper\entities\agent\Person;
@@ -9,6 +15,8 @@ use IMSGlobal\Caliper\entities\agent\Person;
 class CaliperActor {
 	/**
 	 * Generates a WordPress actor with overridable homepage and id
+	 *
+	 * @param \WP_User $user WordPress User.
 	 */
 	private static function _generate_actor( \WP_User &$user ) {
 		// load user data to get external unique identifier.
@@ -38,6 +46,8 @@ class CaliperActor {
 
 	/**
 	 * Generates a Caliper actor
+	 *
+	 * @param \WP_User $user WordPress User.
 	 */
 	public static function generate_actor( \WP_User &$user ) {
 		// happens when not logged in.
