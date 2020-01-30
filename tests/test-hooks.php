@@ -30,7 +30,6 @@ class HookTest extends WP_UnitTestCase {
 		wp_set_current_user( $this->user->ID );
 
 		$this->post = $this->factory->post->create_and_get();
-		$this->go_to( get_permalink( $this->post->ID ) );
 
 		$this->comment = $this->factory->comment->create_and_get(
 			array(
@@ -143,13 +142,24 @@ class HookTest extends WP_UnitTestCase {
 			'selections' => array(),
 		);
 
-		CaliperSensor::set_send_events( false );
+		$this->go_to( get_permalink( $this->post->ID ) );
+		CaliperSensor::is_test( true );
+
+		/*
+		 * To enable automatic emitting to certification suite
+		 * uncomment the line below and add the cert suite host & key
+		 * in the `_enable_caliper` section
+		 * (both wp_caliper_network_settings and wp_caliper_settings).
+		 */
+		/* CaliperSensor::send_test_events( true ); */
 	}
 
 	/**
 	 * Tear down tests
 	 */
 	function tearDown() {
+		CaliperSensor::is_test( false );
+		CaliperSensor::send_test_events( false );
 		parent::tearDown();
 	}
 
@@ -202,6 +212,7 @@ class HookTest extends WP_UnitTestCase {
 				'type'   => 'Session',
 				'client' => array(
 					'type'      => 'SoftwareApplication',
+					'host'		=> 'example.org',
 					'ipAddress' => '127.0.0.1',
 				),
 				'user'   => $this->expected_actor,
@@ -313,10 +324,7 @@ class HookTest extends WP_UnitTestCase {
 			'type'       => 'NavigationEvent',
 			'profile'    => 'ReadingProfile',
 			'action'     => 'NavigatedTo',
-			'object'     => array(
-				'id'   => 'http://example.org/?p=' . $this->post->ID,
-				'type' => 'WebPage',
-			),
+			'object'     => $this->expected_post,
 			'extensions' => array(
 				'queryString'  => 'p=' . $this->post->ID,
 				'absolutePath' => 'http://example.org/',

@@ -51,7 +51,7 @@
             "id": "http://wordpress/",
             "type": "SoftwareApplication",
             "name": "WordPress",
-            "version": "5.0"
+            "version": "5.3.2"
         },
         "session": {
             "id": "http://wordpress/session/WEBH8mGALcB7YA5obLOc4Z6XY6xYJCokQ7VbGPtKC64",
@@ -59,7 +59,9 @@
             "client": {
                 "id": "http://wordpress/session/WEBH8mGALcB7YA5obLOc4Z6XY6xYJCokQ7VbGPtKC64#client",
                 "type": "SoftwareApplication",
-                "ipAddress": "172.21.0.1"
+                "host": "localhost",
+				"ipAddress": "172.29.0.1",
+				"userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:72.0) Gecko/20100101 Firefox/72.0"
             },
             "user": {
                 "id": "http://www.ubc.ca/PUID123ROOT",

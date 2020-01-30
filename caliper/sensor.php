@@ -9,7 +9,6 @@ use IMSGlobal\Caliper\Options;
 use IMSGlobal\Caliper\Sensor;
 use IMSGlobal\Caliper\events\Event;
 use IMSGlobal\Caliper\Client;
-use IMSGlobal\Caliper\util\TimestampUtil;
 
 use IMSGlobal\Caliper\request\HttpRequestor;
 
@@ -22,19 +21,30 @@ class CaliperSensor {
 	 */
 	private static $options = null;
 	/**
-	 * Enable/Disable sending events (for testing)
+	 * Enable/Disable testing events
 	 */
-	private static $send_events = true; // allows disabling for unit tests.
+	private static $is_test = false;
+	/**
+	 * Enable/Disable sending test events
+	 */
+	private static $send_test_events = false;
 	/**
 	 * Stores the sent Caliper events (for testing)
 	 */
 	private static $temp_store = array();
 
 	/**
-	 * Sets $send_events (for testing)
+	 * Sets $is_test (for testing)
 	 */
-	public static function set_send_events( $send_events ) {
-		self::$send_events = $send_events;
+	public static function is_test( $is_test ) {
+		self::$is_test = $is_test;
+	}
+
+	/**
+	 * Sets $is_test (for testing)
+	 */
+	public static function send_test_events( $send_test_events ) {
+		self::$send_test_events = $send_test_events;
 	}
 
 	/**
@@ -115,9 +125,12 @@ class CaliperSensor {
 		}
 
 		// used for unit tests.
-		if ( ! self::$send_events ) {
+		if ( self::$is_test ) {
 			self::$temp_store[] = $event_json;
-			return true;
+
+			if ( ! self::$send_test_events ) {
+				return true;
+			}
 		}
 
 		/*

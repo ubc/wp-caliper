@@ -10,55 +10,40 @@ use IMSGlobal\Caliper\events\SessionEvent;
 use IMSGlobal\Caliper\actions\Action;
 use IMSGlobal\Caliper\profiles\Profile;
 
-use IMSGlobal\Caliper\entities\agent\Organization;
-use IMSGlobal\Caliper\entities\agent\Person;
-use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
-use IMSGlobal\Caliper\entities\DigitalResource;
-use IMSGlobal\Caliper\entities\lis\Membership;
-use IMSGlobal\Caliper\entities\session\Session;
-
 use WPCaliperPlugin\caliper\ResourceIRI;
 use WPCaliperPlugin\caliper\CaliperEntity;
 use WPCaliperPlugin\caliper\CaliperSensor;
 
+add_action( 'wp_enqueue_scripts', 'WPCaliperPlugin\\wp_caliper_enqueue_script', 10, 0 );
 /**
  * Add Frontend tracking ( link click )
  */
-add_action( 'wp_enqueue_scripts', 'WPCaliperPlugin\\wp_caliper_enqueue_script', 10 , 0 );
 function wp_caliper_enqueue_script() {
-	$wp_caliper_blog_id = get_current_blog_id();
-	$wp_caliper_blog_id = base64_encode( $wp_caliper_blog_id );
+	$wp_caliper_post_id = base64_encode( $wp_caliper_post_id );
 
 	wp_enqueue_script( 'sendbeacon', plugins_url( '/js/sendbeacon_polyfill.js', __FILE__ ) );
 	wp_enqueue_script( 'wp_caliper_script', plugins_url( '/js/wp_caliper_js_log.js', __FILE__ ), array( 'jquery', 'sendbeacon' ) );
 	wp_localize_script(
 		'wp_caliper_script',
-		'wp_caliper_object',
+		'wp_caliper_link_log_object',
 		array(
 			'site_url' => site_url(),
 			'url'      => admin_url( 'admin-post.php' ),
-			'security' => wp_create_nonce( 'caliper-click-log-nonce' ),
-			'blog_id'  => $wp_caliper_blog_id,
+			'security' => wp_create_nonce( 'caliper-click-log-nonce' )
 		)
 	);
 }
 
+add_action( 'admin_post_wp_caliper_log_link_click', 'WPCaliperPlugin\\wp_caliper_log_link_click', 10, 0 );
+add_action( 'admin_post_nopriv_wp_caliper_log_link_click', 'WPCaliperPlugin\\wp_caliper_log_link_click', 10, 0 );
 /**
  * Track link clicks
  */
-add_action( 'admin_post_wp_caliper_log_link_click', 'WPCaliperPlugin\\wp_caliper_log_link_click', 10 , 0 );
-add_action( 'admin_post_nopriv_wp_caliper_log_link_click', 'WPCaliperPlugin\\wp_caliper_log_link_click', 10 , 0 );
 function wp_caliper_log_link_click() {
 	check_ajax_referer( 'caliper-click-log-nonce', 'security' );
 
 	$click_url_requested = urldecode( $_POST['click_url_requested'] );
 	$click_url_requested = sanitize_text_field( $click_url_requested );
-
-	$blog_id = base64_decode( $_POST['blog_id'] );
-	$blog_id = intval( $blog_id );
-	if ( ! $blog_id ) {
-		$blog_id = null;
-	}
 
 	$event = ( new NavigationEvent() )
 		->setProfile( new Profile( Profile::READING ) )
@@ -70,9 +55,9 @@ function wp_caliper_log_link_click() {
 	$event->setExtensions(
 		[
 			'linkClick'        => true,
-			'requesterSiteUrl' => ResourceIRI::site( $blog_id ),
+			'requesterSiteUrl' => ResourceIRI::site( get_current_blog_id() ),
 			'queryString'      => $query_string,
-			'absolutePath'     => preg_replace( '/\?.*|\#.*/', '',  $click_url_requested ),
+			'absolutePath'     => preg_replace( '/\?.*|\#.*/', '', $click_url_requested ),
 			'absoluteUrl'      => $click_url_requested,
 		]
 	);
@@ -80,12 +65,11 @@ function wp_caliper_log_link_click() {
 	CaliperSensor::send_event( $event, wp_get_current_user() );
 }
 
-
+add_action( 'badgeos_award_achievement', 'WPCaliperPlugin\\wp_caliper_badgeos_award_achievement', 10, 2 );
 /**
  * This is for badge earning events
  * args parameter should return $user_id, $achievement_id, $this_trigger, $site_id, $args
  */
-add_action( 'badgeos_award_achievement', 'WPCaliperPlugin\\wp_caliper_badgeos_award_achievement', 10, 2 );
 function wp_caliper_badgeos_award_achievement( $user_id, $achievement_id ) {
 	if ( empty( $achievement_id ) ) {
 		return;
@@ -119,30 +103,32 @@ function wp_caliper_badgeos_award_achievement( $user_id, $achievement_id ) {
 	CaliperSensor::send_event( $event, $current_user );
 }
 
+add_action( 'shutdown', 'WPCaliperPlugin\\wp_caliper_shutdown', 10, 0 );
 /**
  * This trigger is for page views of various kinds
  */
-add_action( 'shutdown', 'WPCaliperPlugin\\wp_caliper_shutdown', 10, 0 );
 function wp_caliper_shutdown() {
-	global $post;
-
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		return;
 	}
 	if ( is_admin() ) {
 		return;
 	}
+
 	if ( ! is_singular() && ! is_page() && ! is_attachment() && ! is_front_page() && ! is_home() ) {
 		return;
 	}
 
+	$post        = get_post();
 	$current_url = ResourceIRI::current_page_url();
 
 	$event = ( new NavigationEvent() )
 		->setProfile( new Profile( Profile::READING ) )
 		->setAction( new Action( Action::NAVIGATED_TO ) );
 
-	if ( $post && empty( $post->ID ) ) {
+	if ( is_home() ) {
+		$event->setObject( CaliperEntity::site( get_current_blog_id() ) );
+	} elseif ( $post && ! empty( $post->ID ) ) {
 		$event->setObject( CaliperEntity::post( $post ) );
 	} else {
 		$event->setObject( CaliperEntity::webpage( $current_url ) );

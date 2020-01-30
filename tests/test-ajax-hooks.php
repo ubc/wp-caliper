@@ -43,13 +43,23 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 			'dateCreated' => $this->wp_date_to_iso8601( $this->user->user_registered ),
 		);
 
-		CaliperSensor::set_send_events( false );
+		CaliperSensor::is_test( true );
+
+		/*
+		 * To enable automatic emitting to certification suite
+		 * uncomment the line below and add the cert suite host & key
+		 * in the `_enable_caliper` section
+		 * (both wp_caliper_network_settings and wp_caliper_settings).
+		 */
+		/* CaliperSensor::send_test_events( true ); */
 	}
 
 	/**
 	 * Tear down tests
 	 */
 	function tearDown() {
+		CaliperSensor::is_test( false );
+		CaliperSensor::send_test_events( false );
 		parent::tearDown();
 	}
 
@@ -102,6 +112,7 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 				'type'   => 'Session',
 				'client' => array(
 					'type'      => 'SoftwareApplication',
+					'host'		=> 'example.org',
 					'ipAddress' => '127.0.0.1',
 				),
 				'user'   => $this->expected_actor,
@@ -149,7 +160,6 @@ class AjaxHookTest extends WP_Ajax_UnitTestCase {
 		global $_POST;
 		$_POST['security']            = wp_create_nonce( 'caliper-click-log-nonce' );
 		$_POST['click_url_requested'] = 'http%3A%2F%2Fsome.other.website.com%2F';
-		$_POST['blog_id']             = 1;
 
 		$expected_event = array(
 			'type'       => 'NavigationEvent',
