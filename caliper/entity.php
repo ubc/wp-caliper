@@ -142,7 +142,14 @@ class CaliperEntity {
 		// Set author if exists.
 		$author = get_userdata( $post->post_author );
 		if ( $author ) {
-			$post_entity->setCreators( array( CaliperActor::generate_actor( $author ) ) );
+
+			$actor = CaliperActor::generate_actor( $author );
+
+			if ( is_a( $actor, 'Agent' ) ) {
+				$post_entity->setCreators( array( $actor ) );
+			} else {
+				file_put_contents( WP_CONTENT_DIR . '/debug.log', print_r( array( 'WPCALIPERDEBUG', $actor, $author, $post_entity ), true ), FILE_APPEND );
+			}
 		}
 
 		$extensions = array(
