@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Caliper
  * Plugin URI: https://github.com/ubc/wp-caliper
- * Version: 1.1.2
+ * Version: 1.2.0
  * Description: This plugin generates and emits Caliper events to the specified LRS
  * Tags: Caliper
  * Author: CTLT, Andrew Gardener
