@@ -145,7 +145,7 @@ class CaliperEntity {
 
 			$actor = CaliperActor::generate_actor( $author );
 
-			if ( is_a( $actor, 'Agent' ) ) {
+			if ( is_a( $actor, 'IMSGlobal\Caliper\entities\agent\Person' ) ) {
 				$post_entity->setCreators( array( $actor ) );
 			} else {
 				file_put_contents( WP_CONTENT_DIR . '/debug.log', print_r( array( 'WPCALIPERDEBUG', $actor, $author, $post_entity ), true ), FILE_APPEND );
