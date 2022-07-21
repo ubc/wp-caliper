@@ -443,7 +443,7 @@ add_action( 'wp_login', 'WPCaliperPlugin\\wp_caliper_wp_login', 10, 2 );
  * @param bool     $user_login user login.
  * @param \WP_USER $user WordPress user object.
  */
-function wp_caliper_wp_login( $user_login, $user ) {
+function wp_caliper_wp_login( $user_login = false, $user = false ) {
 	if ( empty( $user->ID ) ) {
 		return;
 	}
