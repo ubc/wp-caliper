@@ -20,6 +20,12 @@ use WPCaliperPlugin\caliper\CaliperSensor;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
+
+// Don't want this on local environments.
+if ( defined( 'DISABLE_WP_EXPERIENCE_API' ) && true === constant( 'DISABLE_WP_EXPERIENCE_API' ) ) {
+	return;
+}
+
 if ( ! defined( 'WP_CALIPER_PLUGIN_DIR' ) ) {
 	define( 'WP_CALIPER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 }
